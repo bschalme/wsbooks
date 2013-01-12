@@ -1,8 +1,58 @@
 package ca.airspeed.wsbooks
 
+import static org.apache.commons.lang.StringUtils.*
+
 class InvoiceLineDetail {
 
 	static constraints = {
+		txnLineID(nullable: false)
+		itemRefListID(nullable: true)
+		itemRefFullName(nullable: true)
+		itemRefListID validator: {val, obj ->
+			if (isBlank(val) && isBlank(obj.itemRefFullName)) return ['missing.item']
+		}
+		description(nullable: false, blank: false)
+		quantity(nullable: false)
+		quantity validator: { val, obj ->
+			if(!val.isNumber()) return 'notANumber' 
+			if (val.toFloat() < 0.01F) return 'min.notmet'
+		}
+		unitOfMeasure(nullable: true)
+		overrideUOMSetRefListID(nullable: true)
+		overrideUOMSetRefFullName(nullable: true)
+		rate(nullable: false)
+		rate validator: { val, obj ->
+			if(!val.isNumber()) return 'notANumber' 
+			if (val.toFloat() < 0.01F) return 'min.notmet'
+		}
+		ratePercent(nullable: true)
+		classRefListID(nullable: true)
+		classRefFullName(nullable: true)
+		amount(nullable: true)
+		inventorySiteRefListID(nullable: true)
+		inventorySiteRefFullName(nullable: true)
+		serviceDate(nullable: true)
+		salesTaxCodeRefListID(nullable: true)
+		salesTaxCodeRefFullName(nullable: true)
+		salesTaxCodeRefListID validator: {val, obj ->
+			if (isBlank(val) && isBlank(obj.salesTaxCodeRefFullName)) return ['missing.sales.tax.code']
+		}
+		other1(nullable: true)
+		other2(nullable: true)
+		linkedTxnID(nullable: true)
+		linkedTxnLineID(nullable: true)
+		customField1(nullable: true)
+		customField2(nullable: true)
+		customField3(nullable: true)
+		customField4(nullable: true)
+		customField5(nullable: true)
+		customField6(nullable: true)
+		customField7(nullable: true)
+		customField8(nullable: true)
+		customField9(nullable: true)
+		customField10(nullable: true)
+		iDKEY(nullable: false)
+		groupIDKEY(nullable: true)
 	}
 
 	static mapping = {
