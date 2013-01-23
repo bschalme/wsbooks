@@ -91,7 +91,7 @@ class Invoice {
 		customField8(nullable: true)
 		customField9(nullable: true)
 		customField10(nullable: true)
-		status(nullable: true, inList: ['ADD', 'UPDATE', 'DELETE'])
+		status(nullable: false, inList: ['ADD', 'UPDATE', 'DELETE'])
 	}
 
 	static mapping = {
