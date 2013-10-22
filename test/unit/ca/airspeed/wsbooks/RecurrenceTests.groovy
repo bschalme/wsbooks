@@ -13,8 +13,8 @@ import ca.airspeed.wsbooks.Recurrence;
 @TestFor(Recurrence)
 class RecurrenceTests {
 
-    void testSomething() {
+    void testConstraints() {
        def recurrence = new Recurrence(entityNumber: '347')
-	   assertTrue recurrence.validate()
+	   assert recurrence.validate()
     }
 }

@@ -37,4 +37,5 @@ class InvoiceTests {
 	   inv.status = 'DELETE'
 	   assert inv.validate()
     }
+	
 }

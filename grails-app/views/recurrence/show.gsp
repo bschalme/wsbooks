@@ -113,11 +113,11 @@
 				</li>
 				</g:if>
 			
-				<g:if test="${recurrenceInstance?.dateUpdated}">
+				<g:if test="${recurrenceInstance?.lastUpdated}">
 				<li class="fieldcontain">
-					<span id="dateUpdated-label" class="property-label"><g:message code="recurrence.dateUpdated.label" default="Date Updated" /></span>
+					<span id="lastUpdated-label" class="property-label"><g:message code="recurrence.lastUpdated.label" default="Last Updated" /></span>
 					
-						<span class="property-value" aria-labelledby="dateUpdated-label"><g:formatDate date="${recurrenceInstance?.dateUpdated}" /></span>
+						<span class="property-value" aria-labelledby="lastUpdated-label"><g:formatDate date="${recurrenceInstance?.lastUpdated}" /></span>
 					
 				</li>
 				</g:if>

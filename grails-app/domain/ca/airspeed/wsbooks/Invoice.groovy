@@ -95,6 +95,7 @@ class Invoice {
 	}
 
 	static mapping = {
+		datasource 'opensync'
 		table 'invoice'
 		version false
 		id column: 'TxnID', generator: 'assigned'
@@ -181,6 +182,8 @@ class Invoice {
 		status column: 'Status'
 	}
 
+	String id
+	
 	static transients = ['txnID']
 	String txnID
 	String timeCreated
@@ -264,11 +267,15 @@ class Invoice {
 	String customField10
 	String status
 
-	def getTxnId() {
+	def getTxnID() {
 		return id
 	}
 
-	def setTxnId(String txnId) {
+	def setTxnID(String txnId) {
 		this.id = txnId
+	}
+	
+	String toString() {
+		return 'Invoice #' + refNumber + ' for ' + customerRefFullName
 	}
 }

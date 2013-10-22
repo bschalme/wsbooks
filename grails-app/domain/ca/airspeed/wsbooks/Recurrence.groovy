@@ -12,7 +12,7 @@ class Recurrence {
 		frequency(inList: ["Daily", "Weekly", "Bi-Weekly", "Monthly", "Quarterly", "Semi-Annually", "Annually"])
 		txnTiming(inList: ["In Advance", "In Arrears"])
 		previousRunDate editable: false, nullable: true
-		nextRunDate(min: new Date())
+		nextRunDate(min: new Date(), nullable: true)
 		finalRunDate(min: new Date())
 		active nullable: false
     }

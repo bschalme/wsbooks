@@ -74,11 +74,3 @@
 	<g:checkBox name="active" value="${recurrenceInstance?.active}" />
 </div>
 
-<div class="fieldcontain ${hasErrors(bean: recurrenceInstance, field: 'dateUpdated', 'error')} required">
-	<label for="dateUpdated">
-		<g:message code="recurrence.dateUpdated.label" default="Date Updated" />
-		<span class="required-indicator">*</span>
-	</label>
-	<g:datePicker name="dateUpdated" precision="day"  value="${recurrenceInstance?.dateUpdated}"  />
-</div>
-

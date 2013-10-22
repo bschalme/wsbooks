@@ -7,7 +7,7 @@ import ca.airspeed.wsbooks.Recurrence;
 class RecurrenceController {
 
     static allowedMethods = [save: "POST", update: "POST", delete: "POST"]
-
+	
     def index() {
         redirect(action: "list", params: params)
     }
@@ -79,6 +79,8 @@ class RecurrenceController {
             return
         }
 
+    	log.info('Wrote a Recurrence for ' + recurrenceInstance.entityName + ' ' + recurrenceInstance.entityNumber + ' on a ' + recurrenceInstance.frequency + ' basis.')
+		// log.info('Hello World!')
         flash.message = message(code: 'default.updated.message', args: [message(code: 'recurrence.label', default: 'Recurrence'), recurrenceInstance.id])
         redirect(action: "show", id: recurrenceInstance.id)
     }

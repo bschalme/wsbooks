@@ -11,6 +11,7 @@ grails.project.dependency.resolution = {
     inherits("global") {
         // specify dependency exclusions here; for example, uncomment this to disable ehcache:
         // excludes 'ehcache'
+		// excludes 'grails-plugin-log4j', 'log4j', 'commons-logging'
     }
     log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
@@ -34,8 +35,20 @@ grails.project.dependency.resolution = {
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
-        // runtime 'mysql:mysql-connector-java:5.1.20'
+        compile 'mysql:mysql-connector-java:5.1.23'
 		compile 'joda-time:joda-time:2.1'
+		runtime 'javax.mail:mail:1.4.7'
+		runtime 'javax.activation:activation:1.1.1'
+		compile 'com.freshbooks:freshbooksApiClient:1.0-SNAPSHOT'
+		// compile 'org.grails.plugins:logback:0.3.1'
+		// compile 'org.slf4j:slf4j-api:1.7.5'
+		// compile 'org.slf4j:jcl-over-slf4j:1.7.5'
+		// compile 'org.slf4j:log4j-over-slf4j:1.7.5'
+		// compile 'org.slf4j:slf4j-nop:1.7.5'
+		// compile 'ch.qos.logback:logback-classic:1.0.13'
+		// compile 'ch.qos.logback:logback-core:1.0.13'
+		// compile 'org.logback-extensions:logback-ext-spring:0.1.1'
+		// compile 'com.google.guava:guava:14.0.1'
     }
 
     plugins {
@@ -53,5 +66,7 @@ grails.project.dependency.resolution = {
         runtime ":database-migration:1.1"
 
         compile ':cache:1.0.0'
+		compile ":rest-client-builder:1.0.3"
     }
+	
 }

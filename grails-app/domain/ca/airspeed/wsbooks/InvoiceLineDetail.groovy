@@ -11,7 +11,7 @@ class InvoiceLineDetail {
 		itemRefListID validator: {val, obj ->
 			if (isBlank(val) && isBlank(obj.itemRefFullName)) return ['missing.item']
 		}
-		description(nullable: false, blank: false)
+		description(nullable: true)
 		quantity(nullable: false)
 		quantity validator: { val, obj ->
 			if(!val.isNumber()) return 'notANumber' 
@@ -20,11 +20,7 @@ class InvoiceLineDetail {
 		unitOfMeasure(nullable: true)
 		overrideUOMSetRefListID(nullable: true)
 		overrideUOMSetRefFullName(nullable: true)
-		rate(nullable: false)
-		rate validator: { val, obj ->
-			if(!val.isNumber()) return 'notANumber' 
-			if (val.toFloat() < 0.01F) return 'min.notmet'
-		}
+		rate(nullable: true)
 		ratePercent(nullable: true)
 		classRefListID(nullable: true)
 		classRefFullName(nullable: true)
@@ -34,9 +30,6 @@ class InvoiceLineDetail {
 		serviceDate(nullable: true)
 		salesTaxCodeRefListID(nullable: true)
 		salesTaxCodeRefFullName(nullable: true)
-		salesTaxCodeRefListID validator: {val, obj ->
-			if (isBlank(val) && isBlank(obj.salesTaxCodeRefFullName)) return ['missing.sales.tax.code']
-		}
 		other1(nullable: true)
 		other2(nullable: true)
 		linkedTxnID(nullable: true)
@@ -56,9 +49,10 @@ class InvoiceLineDetail {
 	}
 
 	static mapping = {
+		datasource 'opensync'
 		table 'invoicelinedetail'
 		version false
-		id column: 'TxnID', generator: 'assigned'
+		id column: 'TxnLineID', generator: 'assigned'
 		txnLineID column: 'TxnLineID'
 		itemRefListID column: 'ItemRef_ListID'
 		itemRefFullName column: 'ItemRef_FullName'
@@ -94,8 +88,10 @@ class InvoiceLineDetail {
 		iDKEY column: 'IDKEY'
 		groupIDKEY column: 'GroupIDKEY'
 	}
+	
+	String id
 
-	static transients = ['txnID']
+	static transients = ['txnLineID']
 	String txnLineID
 	String itemRefListID
 	String itemRefFullName
@@ -131,11 +127,11 @@ class InvoiceLineDetail {
 	String iDKEY
 	String groupIDKEY
 
-	def getTxnId() {
+	def getTxnLineID() {
 		return id
 	}
 
-	def setTxnId(String txnId) {
+	def setTxnLineID(String txnId) {
 		this.id = txnId
 	}
 }
