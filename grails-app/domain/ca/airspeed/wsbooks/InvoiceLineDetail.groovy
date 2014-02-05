@@ -3,6 +3,8 @@ package ca.airspeed.wsbooks
 import static org.apache.commons.lang.StringUtils.*
 
 class InvoiceLineDetail {
+	
+	static belongsTo = [invoice : Invoice]
 
 	static constraints = {
 		txnLineID(nullable: false)
@@ -44,7 +46,6 @@ class InvoiceLineDetail {
 		customField8(nullable: true)
 		customField9(nullable: true)
 		customField10(nullable: true)
-		iDKEY(nullable: false)
 		groupIDKEY(nullable: true)
 	}
 
@@ -85,8 +86,8 @@ class InvoiceLineDetail {
 		customField8 column: 'CustomField8'
 		customField9 column: 'CustomField9'
 		customField10 column: 'CustomField10'
-		iDKEY column: 'IDKEY'
 		groupIDKEY column: 'GroupIDKEY'
+		invoice column: 'IDKEY'
 	}
 	
 	String id
@@ -124,7 +125,6 @@ class InvoiceLineDetail {
 	String customField8
 	String customField9
 	String customField10
-	String iDKEY
 	String groupIDKEY
 
 	def getTxnLineID() {

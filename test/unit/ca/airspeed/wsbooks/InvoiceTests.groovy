@@ -2,8 +2,7 @@ package ca.airspeed.wsbooks
 
 
 
-import grails.test.mixin.*
-import org.junit.*
+import grails.test.mixin.TestFor
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
@@ -29,6 +28,13 @@ class InvoiceTests {
 	   inv.status = 'ZZZZ'
 	   assert !inv.validate()
 	   assert "not.inList" == inv.errors["status"].code
+	   
+	   assert "invoice.details.minimum" == inv.errors["detailLines"]?.code
+	   Set<InvoiceLineDetail> details = new HashSet<InvoiceLineDetail>()
+	   inv.detailLines = details
+	   assert "invoice.details.minimum" == inv.errors["detailLines"]?.code
+	   details.add(new InvoiceLineDetail())
+	   inv.detailLines = details
 	   
 	   inv.status = 'ADD'
 	   assert inv.validate()

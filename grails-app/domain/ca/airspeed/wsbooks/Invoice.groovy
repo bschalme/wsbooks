@@ -2,7 +2,11 @@ package ca.airspeed.wsbooks
 
 import static org.apache.commons.lang.StringUtils.*
 
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+
 class Invoice {
+	
+	static hasMany = [detailLines : InvoiceLineDetail]
 
 	static constraints = {
 		txnID(nullable: false)
@@ -92,6 +96,13 @@ class Invoice {
 		customField9(nullable: true)
 		customField10(nullable: true)
 		status(nullable: false, inList: ['ADD', 'UPDATE', 'DELETE'])
+		detailLines validator: { detailLines, invoice, errors ->
+			if (detailLines == null) {
+				errors.rejectValue('detailLines', 'invoice.details.minimum', 'Need at least one invoice detail line.')
+				return false
+			}
+			return true
+		}
 	}
 
 	static mapping = {

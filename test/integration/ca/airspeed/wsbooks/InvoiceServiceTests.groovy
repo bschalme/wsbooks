@@ -51,18 +51,17 @@ class InvoiceServiceTests {
 		inv347.isPaid = true
 		inv347.isToBePrinted = false
 		inv347.status = 'ADD'
-		inv347.save(failOnError: true, flush: true)
 		
 		def dtl347 = new InvoiceLineDetail()
 		dtl347.txnLineID = UUID.randomUUID().toString()
 		dtl347.id = dtl347.txnLineID
-		dtl347.iDKEY = inv347.txnID
 		dtl347.itemRefFullName = 'A&P:$100/hr'
 		dtl347.description = 'Analysis & Programming Services (hours)'
 		dtl347.quantity = 12.5
 		dtl347.rate = 100.00
 		dtl347.salesTaxCodeRefFullName = 'G'
-		dtl347.save(failOnError: true, flush: true)
+		inv347.addToDetailLines(dtl347)
+		inv347.save(failOnError: true, flush: true)
 		
 		def r = new Recurrence(nickname:'Test Invoice Recurrence', entityName:'Invoice')
 		r.entityNumber = '347'
@@ -94,19 +93,21 @@ class InvoiceServiceTests {
 		assert resultInv.other == expectedOther
 		assert resultInv.status == 'ADD'
 		
-		def resultDtls = InvoiceLineDetail.findAllByIDKEY(resultInv.txnID)
+		def resultDtls = resultInv.detailLines
 		assert resultDtls.size() == 1
-		def resultDtl = resultDtls[0]
-		assert resultDtl.iDKEY == resultInv.txnID
-		assert resultDtl.itemRefFullName == 'A&P:$100/hr'
-		assert resultDtl.description == 'Analysis & Programming Services (hours)'
-		assert resultDtl.quantity == '12.5'
-		assert resultDtl.rate == '100.00'
-		assert resultDtl.salesTaxCodeRefFullName == 'G'
+		resultDtls.each { resultDtl ->
+			assert resultDtl.itemRefFullName == 'A&P:$100/hr'
+			assert resultDtl.description == 'Analysis & Programming Services (hours)'
+			assert resultDtl.quantity == '12.5'
+			assert resultDtl.rate == '100.00'
+			assert resultDtl.salesTaxCodeRefFullName == 'G'
+		}
 	}
 
 	@Test
 	void testGetNextRefNumber() {
+		def invLine = new InvoiceLineDetail(itemRefListID: 'ABC-123', quantity: 1)
+		invLine.txnLineID = UUID.randomUUID().toString()
 		def inv205 = new Invoice(refNumber: '205')
 		inv205.txnID = UUID.randomUUID().toString()
 		inv205.id = inv205.txnID
@@ -114,6 +115,7 @@ class InvoiceServiceTests {
 		inv205.customerRefFullName = 'MegaCorp:Smart Desktop'
 		inv205.termsRefFullName = 'Net 30'
 		inv205.status = 'ADD'
+		inv205.addToDetailLines(invLine)
 		inv205.save(failOnError: true, flush: true)
 
 		def inv427 = new Invoice(refNumber: '427')
@@ -123,6 +125,7 @@ class InvoiceServiceTests {
 		inv427.customerRefFullName = 'Ford:Big Engine'
 		inv427.termsRefFullName = 'Net 30'
 		inv427.status = 'ADD'
+		inv427.addToDetailLines(invLine)
 		inv427.save(failOnError: true)
 
 		def inv99 = new Invoice(refNumber: '99')
@@ -132,6 +135,7 @@ class InvoiceServiceTests {
 		inv99.customerRefFullName = 'Joes Bakery:POS System'
 		inv99.termsRefFullName = 'Net 30'
 		inv99.status = 'ADD'
+		inv99.addToDetailLines(invLine)
 		inv99.save(failOnError: true, flush: true)
 
 		def invoices = Invoice.list()
@@ -233,7 +237,7 @@ class InvoiceServiceTests {
 		assert inv.other == expectedOther
 		assert inv.status == 'ADD'
 		
-		def invLines = InvoiceLineDetail.findAllByIDKEY(inv.txnID)
+		def invLines = inv.detailLines
 		assert invLines.size() == 2
 		InvoiceLineDetail line = invLines.find() {
 			it.itemRefListID == '140000-1069940598'
