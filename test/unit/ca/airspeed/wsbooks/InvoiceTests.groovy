@@ -29,10 +29,11 @@ class InvoiceTests {
 	   assert !inv.validate()
 	   assert "not.inList" == inv.errors["status"].code
 	   
-	   assert "invoice.details.minimum" == inv.errors["detailLines"]?.code
+	   assert "nullable" == inv.errors["detailLines"]?.find{ it.code == 'nullable'}.code
 	   Set<InvoiceLineDetail> details = new HashSet<InvoiceLineDetail>()
 	   inv.detailLines = details
-	   assert "invoice.details.minimum" == inv.errors["detailLines"]?.code
+	   assert !inv.validate()
+	   assert "invoice.details.minimum" == inv.errors["detailLines"]?.find{ it.code == 'invoice.details.minimum'}?.code
 	   details.add(new InvoiceLineDetail())
 	   inv.detailLines = details
 	   

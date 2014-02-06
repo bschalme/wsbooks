@@ -96,13 +96,17 @@ class Invoice {
 		customField9(nullable: true)
 		customField10(nullable: true)
 		status(nullable: false, inList: ['ADD', 'UPDATE', 'DELETE'])
-		detailLines validator: { detailLines, invoice, errors ->
+		detailLines(validator: { detailLines, invoice, errors ->
 			if (detailLines == null) {
+				errors.rejectValue('detailLines', 'nullable', 'detailLines cannot be null.')
+				return false
+			}
+			if (detailLines.size() < 1) {
 				errors.rejectValue('detailLines', 'invoice.details.minimum', 'Need at least one invoice detail line.')
 				return false
 			}
 			return true
-		}
+		})
 	}
 
 	static mapping = {
