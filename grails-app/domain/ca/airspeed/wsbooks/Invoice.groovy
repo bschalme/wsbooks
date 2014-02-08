@@ -14,11 +14,8 @@ class Invoice {
 		timeModified(nullable: true)
 		editSequence(nullable: true)
 		txnNumber(nullable: true)
-		customerRefListID(nullable: true)
+		customer(nullable: false)
 		customerRefFullName(nullable: true)
-		customerRefListID validator: {val, obj ->
-			if (isBlank(val) && isBlank(obj.customerRefFullName)) return ['missing.customer']
-		}
 		classRefListID(nullable: true)
 		classRefFullName(nullable: true)
 		arAccount(nullable: false, validator: {acct, obj, errors ->
@@ -124,7 +121,7 @@ class Invoice {
 		timeModified column: 'TimeModified'
 		editSequence column: 'EditSequence'
 		txnNumber column: 'TxnNumber'
-		customerRefListID column: 'CustomerRef_ListID'
+		customer column: 'CustomerRef_ListID'
 		customerRefFullName column: 'CustomerRef_FullName'
 		classRefListID column: 'ClassRef_ListID'
 		classRefFullName column: 'ClassRef_FullName'
@@ -210,7 +207,7 @@ class Invoice {
 	String timeModified
 	String editSequence
 	Integer txnNumber
-	String customerRefListID
+	Customer customer
 	String customerRefFullName
 	String classRefListID
 	String classRefFullName

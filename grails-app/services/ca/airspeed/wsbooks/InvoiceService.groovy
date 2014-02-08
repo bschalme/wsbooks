@@ -93,7 +93,7 @@ class InvoiceService {
 		inv.templateRefListID = 'C0000-1078107584'
 		inv.termsRefListID = '20000-929918818'
 		inv.customerMsg = CustomerMsg.get('70000-951878262')
-		inv.customerRefListID = customer.listID
+		inv.customer = customer
 		inv.isToBePrinted = 'true'
 		def startOfMonthFm = new SimpleDateFormat('MMM d')
 		def endOfMonthFm = new SimpleDateFormat('d, yyyy')
@@ -104,7 +104,7 @@ class InvoiceService {
 		resultInvoice.invoiceNumber = inv.refNumber
 		resultInvoice.sourceSystem = 'QuickBooks'
 		// ToDo: Refactor, since this assumes the immediate parent is the top-level Customer:
-		resultInvoice.clientID = Customer.get(inv.customerRefListID).parentRefListID
+		resultInvoice.clientID = inv.customer.parent?.listID
 		resultInvoice.date = inv.txnDate
 		resultInvoice.terms = StandardTerms.get(inv.termsRefListID)?.name
 		resultInvoice.period = inv.other

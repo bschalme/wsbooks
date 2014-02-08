@@ -15,7 +15,7 @@ class InvoiceTests {
 	   
 	   assert !inv.validate()
 	   assert "nullable" == inv.errors["txnID"].code
-	   assert "missing.customer" == inv.errors["customerRefListID"].code
+	   assert "nullable" == inv.errors["customer"].code
 	   assert "nullable" == inv.errors["txnDate"].code
 	   assert "nullable" == inv.errors["refNumber"].code
 	   assert "nullable" == inv.errors["arAccount"].code
@@ -23,7 +23,7 @@ class InvoiceTests {
 	   
 	   inv.txnID = 'ABC-123'
 	   inv.arAccount = new Account()
-	   inv.customerRefFullName = "MegaCorp:Real Estate Web Service"
+	   inv.customer = new Customer(name: "MegaCorp:Real Estate Web Service")
 	   inv.txnDate = new Date()
 	   inv.refNumber = '99999'
 	   inv.customerMsg = new CustomerMsg()

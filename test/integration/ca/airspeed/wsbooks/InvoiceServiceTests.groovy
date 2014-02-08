@@ -42,7 +42,7 @@ class InvoiceServiceTests {
 		inv347.txnID = UUID.randomUUID().toString()
 		inv347.id = inv347.txnID
 		inv347.txnDate = new LocalDate().minusMonths(5).withDayOfMonth(1).toDate()
-		inv347.customerRefFullName = 'Joes Bakery:POS System'
+		inv347.customer = Customer.get('800000EB-1251942204')
 		inv347.termsRefFullName = 'Net 30'
 		inv347.subtotal = 60
 		inv347.salesTaxPercentage = 5.00
@@ -82,7 +82,7 @@ class InvoiceServiceTests {
 				resultInv.txnID.equals(inv347.txnID))
 		def expectedTxnDate = new LocalDate().withDayOfMonth(1).toDate()
 		assert expectedTxnDate == resultInv.txnDate
-		assert resultInv.customerRefFullName == 'Joes Bakery:POS System'
+		assert resultInv.customer.listID == '800000EB-1251942204'
 		assert resultInv.appliedAmount == 0
 		assert resultInv.balanceRemaining == 63
 		assert resultInv.isPaid == 'false'
@@ -115,7 +115,7 @@ class InvoiceServiceTests {
 		inv205.id = inv205.txnID
 		inv205.txnDate = new LocalDate().withDayOfMonth(1).toDate()
 		inv205.arAccount = arAccount
-		inv205.customerRefFullName = 'MegaCorp:Smart Desktop'
+		inv205.customer = Customer.get('800000EB-1251942204')
 		inv205.termsRefFullName = 'Net 30'
 		inv205.status = 'ADD'
 		inv205.addToDetailLines(invLine)
@@ -126,7 +126,7 @@ class InvoiceServiceTests {
 		inv427.id = inv427.txnID
 		inv427.txnDate = new LocalDate().withDayOfMonth(1).toDate()
 		inv427.arAccount = arAccount
-		inv427.customerRefFullName = 'Ford:Big Engine'
+		inv427.customer = Customer.get('CB0000-1190817876')
 		inv427.termsRefFullName = 'Net 30'
 		inv427.status = 'ADD'
 		inv427.addToDetailLines(invLine)
@@ -137,7 +137,7 @@ class InvoiceServiceTests {
 		inv99.id = inv99.txnID
 		inv99.txnDate = new LocalDate().withDayOfMonth(1).toDate()
 		inv99.arAccount = arAccount
-		inv99.customerRefFullName = 'Joes Bakery:POS System'
+		inv99.customer = Customer.get('CB0000-1190817876')
 		inv99.termsRefFullName = 'Net 30'
 		inv99.status = 'ADD'
 		inv99.addToDetailLines(invLine)
@@ -228,14 +228,15 @@ class InvoiceServiceTests {
 		lineCreated = invCreated.lines[1]
 		assert lineCreated.quantity == 1.5
 
-		Invoice inv = Invoice.findByCustomerRefListID('CD0000-1190818043')
+		Invoice inv = Invoice.findByCustomer(Customer.get('CD0000-1190818043'))
 		assert inv != null
 		assert StringUtils.isNotBlank(inv.txnID)
 		assert inv.refNumber == '1'
 		assert inv.txnDate == endOfLastMonth
 		assert inv.arAccount.accountType == 'AccountsReceivable'
 		assert inv.templateRefListID == 'C0000-1078107584'
-		assert inv.customerRefListID == 'CD0000-1190818043'
+		assert inv.customer.listID == 'CD0000-1190818043'
+		assert inv.customer.fullName == 'FNT:Website Hosting'
 		assert inv.termsRefListID == '20000-929918818'
 		assert inv.customerMsg.name?.startsWith('Questions concerning this invoice?')
 		assert inv.isToBePrinted == 'true'
@@ -280,7 +281,7 @@ class InvoiceServiceTests {
 		service.createTimeByCustomerAndDate(cust, endOfLastMonth)
 		
 		// Then
-		def invoices = Invoice.findAllByCustomerRefListIDAndTxnDate('5A0000-1013976766', endOfLastMonth)
+		def invoices = Invoice.findAllByCustomerAndTxnDate(Customer.get('5A0000-1013976766'), endOfLastMonth)
 		assert invoices.size() == 0
 	}
 

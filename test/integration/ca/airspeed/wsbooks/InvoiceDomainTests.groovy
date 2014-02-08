@@ -13,7 +13,7 @@ class InvoiceDomainTests {
 		def inv = new Invoice()
 		inv.txnID = 'ABC-123'
 		inv.arAccount = Account.get('3F0000-930012744')
-		inv.customerRefFullName = "MegaCorp:Real Estate Web Service"
+		inv.customer = Customer.get('CB0000-1190817876')
 		inv.txnDate = new Date()
 		inv.refNumber = '99999'
 		inv.termsRefFullName = 'Net 30'

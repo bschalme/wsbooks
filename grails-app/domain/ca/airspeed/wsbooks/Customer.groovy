@@ -10,7 +10,7 @@ class Customer {
 		name(nullable: false)
 		fullName(nullable: true)
 		isActive(nullable: true)
-		parentRefListID(nullable: true)
+		parent(nullable: true)
 		parentRefFullName(nullable: true)
 		sublevel(nullable: true)
 		companyName(nullable: true)
@@ -112,7 +112,7 @@ class Customer {
 		name column: 'Name'
 		fullName column: 'FullName'
 		isActive column: 'IsActive'
-		parentRefListID column: 'ParentRef_ListID'
+		parent column: 'ParentRef_ListID'
 		parentRefFullName column: 'ParentRef_FullName'
 		sublevel column: 'Sublevel'
 		companyName column: 'CompanyName'
@@ -212,7 +212,7 @@ class Customer {
 	String name
 	String fullName
 	String isActive
-	String parentRefListID
+	Customer parent
 	String parentRefFullName
 	Integer sublevel
 	String companyName
