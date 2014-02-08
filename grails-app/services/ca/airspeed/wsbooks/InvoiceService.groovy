@@ -88,7 +88,7 @@ class InvoiceService {
 		inv.txnID = UUID.randomUUID().toString()
 		inv.refNumber = getNextRefNumber()
 		inv.txnDate = invoiceDate
-		inv.aRAccountRefListID = '3F0000-930012744'
+		inv.arAccount = Account.findByAccountType('AccountsReceivable')
 		inv.templateRefListID = 'C0000-1078107584'
 		inv.customerRefListID = customer.listID
 		inv.termsRefListID = '20000-929918818'

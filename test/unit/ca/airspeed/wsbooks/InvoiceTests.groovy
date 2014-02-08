@@ -18,9 +18,11 @@ class InvoiceTests {
 	   assert "missing.customer" == inv.errors["customerRefListID"].code
 	   assert "nullable" == inv.errors["txnDate"].code
 	   assert "nullable" == inv.errors["refNumber"].code
+	   assert "nullable" == inv.errors["arAccount"].code
 	   assert "missing.terms" == inv.errors["termsRefListID"].code
 	   
 	   inv.txnID = 'ABC-123'
+	   inv.arAccount = new Account()
 	   inv.customerRefFullName = "MegaCorp:Real Estate Web Service"
 	   inv.txnDate = new Date()
 	   inv.refNumber = '99999'
@@ -28,10 +30,12 @@ class InvoiceTests {
 	   inv.status = 'ZZZZ'
 	   assert !inv.validate()
 	   assert "not.inList" == inv.errors["status"].code
+	   assert "account.must.be.ar" == inv.errors["arAccount"].code
 	   
 	   assert "nullable" == inv.errors["detailLines"]?.find{ it.code == 'nullable'}.code
 	   Set<InvoiceLineDetail> details = new HashSet<InvoiceLineDetail>()
 	   inv.detailLines = details
+	   inv.arAccount.accountType = 'AccountsReceivable'
 	   assert !inv.validate()
 	   assert "invoice.details.minimum" == inv.errors["detailLines"]?.find{ it.code == 'invoice.details.minimum'}?.code
 	   details.add(new InvoiceLineDetail())

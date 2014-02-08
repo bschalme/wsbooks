@@ -21,7 +21,12 @@ class Invoice {
 		}
 		classRefListID(nullable: true)
 		classRefFullName(nullable: true)
-		aRAccountRefListID(nullable: true)
+		arAccount(nullable: false, validator: {acct, obj, errors ->
+			if (acct.accountType != 'AccountsReceivable') {
+				errors.rejectValue('arAccount', 'account.must.be.ar', 'arAccount must be an AccountsReceivable account.')
+				return false
+			}
+		})
 		aRAccountRefFullName(nullable: true)
 		templateRefListID(nullable: true)
 		templateRefFullName(nullable: true)
@@ -123,7 +128,6 @@ class Invoice {
 		customerRefFullName column: 'CustomerRef_FullName'
 		classRefListID column: 'ClassRef_ListID'
 		classRefFullName column: 'ClassRef_FullName'
-		aRAccountRefListID column: 'ARAccountRef_ListID'
 		aRAccountRefFullName column: 'ARAccountRef_FullName'
 		templateRefListID column: 'TemplateRef_ListID'
 		templateRefFullName column: 'TemplateRef_FullName'
@@ -195,6 +199,7 @@ class Invoice {
 		customField9 column: 'CustomField9'
 		customField10 column: 'CustomField10'
 		status column: 'Status'
+		arAccount column: 'ARAccountRef_ListID'
 	}
 
 	String id
@@ -209,7 +214,7 @@ class Invoice {
 	String customerRefFullName
 	String classRefListID
 	String classRefFullName
-	String aRAccountRefListID
+	Account arAccount
 	String aRAccountRefFullName
 	String templateRefListID
 	String templateRefFullName

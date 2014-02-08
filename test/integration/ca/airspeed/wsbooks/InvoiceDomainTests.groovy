@@ -12,6 +12,7 @@ class InvoiceDomainTests {
 	public void testSave() {
 		def inv = new Invoice()
 		inv.txnID = 'ABC-123'
+		inv.arAccount = Account.get('3F0000-930012744')
 		inv.customerRefFullName = "MegaCorp:Real Estate Web Service"
 		inv.txnDate = new Date()
 		inv.refNumber = '99999'
@@ -27,6 +28,8 @@ class InvoiceDomainTests {
 		
 		assert Invoice.list().size() == 1
 		inv = Invoice.list().get(0)
+		assert inv.arAccount.name == 'Accounts Receivable'
+		assert inv.refNumber == '99999'
 		assert inv.detailLines?.size() == 1
 		for (line in inv.detailLines) {
 			assert line.txnLineID == 'DEF-456'

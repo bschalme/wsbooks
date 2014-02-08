@@ -37,7 +37,8 @@ class InvoiceServiceTests {
 
 	@Test
 	void testCreateRecurringInvoice() {
-		def inv347 = new Invoice(refNumber: '347')
+		Account arAccount = Account.findByAccountType('AccountsReceivable')
+		def inv347 = new Invoice(refNumber: '347', arAccount: arAccount)
 		inv347.txnID = UUID.randomUUID().toString()
 		inv347.id = inv347.txnID
 		inv347.txnDate = new LocalDate().minusMonths(5).withDayOfMonth(1).toDate()
@@ -106,12 +107,14 @@ class InvoiceServiceTests {
 
 	@Test
 	void testGetNextRefNumber() {
+		def arAccount = Account.findByFullName('Accounts Receivable')
 		def invLine = new InvoiceLineDetail(itemRefListID: 'ABC-123', quantity: 1)
 		invLine.txnLineID = UUID.randomUUID().toString()
 		def inv205 = new Invoice(refNumber: '205')
 		inv205.txnID = UUID.randomUUID().toString()
 		inv205.id = inv205.txnID
 		inv205.txnDate = new LocalDate().withDayOfMonth(1).toDate()
+		inv205.arAccount = arAccount
 		inv205.customerRefFullName = 'MegaCorp:Smart Desktop'
 		inv205.termsRefFullName = 'Net 30'
 		inv205.status = 'ADD'
@@ -122,6 +125,7 @@ class InvoiceServiceTests {
 		inv427.txnID = UUID.randomUUID().toString()
 		inv427.id = inv427.txnID
 		inv427.txnDate = new LocalDate().withDayOfMonth(1).toDate()
+		inv427.arAccount = arAccount
 		inv427.customerRefFullName = 'Ford:Big Engine'
 		inv427.termsRefFullName = 'Net 30'
 		inv427.status = 'ADD'
@@ -132,6 +136,7 @@ class InvoiceServiceTests {
 		inv99.txnID = UUID.randomUUID().toString()
 		inv99.id = inv99.txnID
 		inv99.txnDate = new LocalDate().withDayOfMonth(1).toDate()
+		inv99.arAccount = arAccount
 		inv99.customerRefFullName = 'Joes Bakery:POS System'
 		inv99.termsRefFullName = 'Net 30'
 		inv99.status = 'ADD'
@@ -228,7 +233,7 @@ class InvoiceServiceTests {
 		assert StringUtils.isNotBlank(inv.txnID)
 		assert inv.refNumber == '1'
 		assert inv.txnDate == endOfLastMonth
-		assert inv.aRAccountRefListID == '3F0000-930012744'
+		assert inv.arAccount.accountType == 'AccountsReceivable'
 		assert inv.templateRefListID == 'C0000-1078107584'
 		assert inv.customerRefListID == 'CD0000-1190818043'
 		assert inv.termsRefListID == '20000-929918818'
