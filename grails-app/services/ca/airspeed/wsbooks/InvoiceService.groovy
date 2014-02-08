@@ -88,11 +88,12 @@ class InvoiceService {
 		inv.txnID = UUID.randomUUID().toString()
 		inv.refNumber = getNextRefNumber()
 		inv.txnDate = invoiceDate
-		inv.arAccount = Account.findByAccountType('AccountsReceivable')
+		// ToDo: Make these configurable items:
+		inv.arAccount = Account.get('3F0000-930012744')
 		inv.templateRefListID = 'C0000-1078107584'
-		inv.customerRefListID = customer.listID
 		inv.termsRefListID = '20000-929918818'
-		inv.customerMsgRefListID = '70000-951878262'
+		inv.customerMsg = CustomerMsg.get('70000-951878262')
+		inv.customerRefListID = customer.listID
 		inv.isToBePrinted = 'true'
 		def startOfMonthFm = new SimpleDateFormat('MMM d')
 		def endOfMonthFm = new SimpleDateFormat('d, yyyy')

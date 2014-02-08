@@ -26,6 +26,7 @@ class InvoiceTests {
 	   inv.customerRefFullName = "MegaCorp:Real Estate Web Service"
 	   inv.txnDate = new Date()
 	   inv.refNumber = '99999'
+	   inv.customerMsg = new CustomerMsg()
 	   inv.termsRefFullName = 'Net 30'
 	   inv.status = 'ZZZZ'
 	   assert !inv.validate()

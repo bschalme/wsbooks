@@ -237,7 +237,7 @@ class InvoiceServiceTests {
 		assert inv.templateRefListID == 'C0000-1078107584'
 		assert inv.customerRefListID == 'CD0000-1190818043'
 		assert inv.termsRefListID == '20000-929918818'
-		assert inv.customerMsgRefListID == '70000-951878262'
+		assert inv.customerMsg.name?.startsWith('Questions concerning this invoice?')
 		assert inv.isToBePrinted == 'true'
 		assert inv.other == expectedOther
 		assert inv.status == 'ADD'

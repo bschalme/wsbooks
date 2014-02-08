@@ -80,7 +80,7 @@ class Invoice {
 		balanceRemainingInHomeCurrency(nullable: true)
 		memo(nullable: true)
 		isPaid(nullable: true)
-		customerMsgRefListID(nullable: true)
+		customerMsg(nullable: true)
 		customerMsgRefFullName(nullable: true)
 		isToBePrinted(nullable: true)
 		isToBeEmailed(nullable: true)
@@ -178,7 +178,7 @@ class Invoice {
 		balanceRemainingInHomeCurrency column: 'BalanceRemainingInHomeCurrency'
 		memo column: 'Memo'
 		isPaid column: 'IsPaid'
-		customerMsgRefListID column: 'CustomerMsgRef_ListID'
+		customerMsg column: 'CustomerMsgRef_ListID'
 		customerMsgRefFullName column: 'CustomerMsgRef_FullName'
 		isToBePrinted column: 'IsToBePrinted'
 		isToBeEmailed column: 'IsToBeEmailed'
@@ -265,7 +265,7 @@ class Invoice {
 	Float balanceRemainingInHomeCurrency
 	String memo
 	String isPaid
-	String customerMsgRefListID
+	CustomerMsg customerMsg
 	String customerMsgRefFullName
 	String isToBePrinted
 	String isToBeEmailed
