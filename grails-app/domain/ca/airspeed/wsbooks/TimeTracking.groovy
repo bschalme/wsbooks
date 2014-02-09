@@ -11,9 +11,9 @@ class TimeTracking {
 		txnDate(nullable: false)
 		entityRefListID(nullable: false)
 		entityRefFullName(nullable: true)
-		customerRefListID(nullable: false)
+		customer(nullable: false)
 		customerRefFullName(nullable: true)
-		itemServiceRefListID(nullable: false)
+		itemService(nullable: false)
 		itemServiceRefFullName(nullable: true)
 		rate(nullable: true)
 		duration(nullable: false, blank: false, matches: "PT[0-9]{1,2}H[0-5]?[0-9]M")
@@ -49,9 +49,9 @@ class TimeTracking {
 		txnDate column: 'TxnDate'
 		entityRefListID column: 'EntityRef_ListID'
 		entityRefFullName column: 'EntityRef_FullName'
-		customerRefListID column: 'CustomerRef_ListID'
+		customer column: 'CustomerRef_ListID'
 		customerRefFullName column: 'CustomerRef_FullName'
-		itemServiceRefListID column: 'ItemServiceRef_ListID'
+		itemService column: 'ItemServiceRef_ListID'
 		itemServiceRefFullName column: 'ItemServiceRef_FullName'
 		rate column: 'Rate'
 		duration column: 'Duration'
@@ -85,9 +85,9 @@ class TimeTracking {
 	Date txnDate
 	String entityRefListID
 	String entityRefFullName
-	String customerRefListID
+	Customer customer
 	String customerRefFullName
-	String itemServiceRefListID
+	ItemService itemService
 	String itemServiceRefFullName
 	String rate
 	String duration

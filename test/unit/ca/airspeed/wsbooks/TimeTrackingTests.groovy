@@ -1,9 +1,6 @@
 package ca.airspeed.wsbooks
 
-
-
-import grails.test.mixin.*
-import org.junit.*
+import grails.test.mixin.TestFor;
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
@@ -11,7 +8,6 @@ import org.junit.*
 @TestFor(TimeTracking)
 class TimeTrackingTests {
 
-	@Test
     void testConstraints() {
        def t = new TimeTracking()
 	   t.status = 'BLAH'
@@ -19,8 +15,8 @@ class TimeTrackingTests {
 	   assert "nullable" == t.errors["txnID"].code
 	   assert "nullable" == t.errors["txnDate"].code
 	   assert "nullable" == t.errors["entityRefListID"].code
-	   assert "nullable" == t.errors["customerRefListID"].code
-	   assert "nullable" == t.errors["itemServiceRefListID"]?.code
+	   assert "nullable" == t.errors["customer"].code
+	   assert "nullable" == t.errors["itemService"]?.code
 	   assert "nullable" == t.errors["duration"].code
 	   assert "not.inList" == t.errors["status"].code
 	   
@@ -28,8 +24,8 @@ class TimeTrackingTests {
 	   t.txnID = 'ABC-123'
 	   t.txnDate = new Date()
 	   t.entityRefListID = 'EMP-1'
-	   t.customerRefListID = 'CUST-1'
-	   t.itemServiceRefListID = 'ITEM-1'
+	   t.customer = new Customer(name: 'CUST-1')
+	   t.itemService = new ItemService(name: 'ITEM-1')
 	   t.duration = 'X9XHR8'
 	   assert !t.validate()
 	   assert "matches.invalid" == t.errors["duration"]?.code
@@ -39,7 +35,6 @@ class TimeTrackingTests {
 	   assert t.validate()
     }
 
-	@Test
 	void testGetDurationInMinutes() {
 		def ts = new TimeTracking()
 		
@@ -53,7 +48,6 @@ class TimeTrackingTests {
 		assert ts.durationInMinutes == 90
 	}
 	
-	@Test
 	void testSetDurationInMinutes() {
 		def ts = new TimeTracking()
 		

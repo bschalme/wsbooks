@@ -56,7 +56,7 @@ class InvoiceServiceTests {
 		def dtl347 = new InvoiceLineDetail()
 		dtl347.txnLineID = UUID.randomUUID().toString()
 		dtl347.id = dtl347.txnLineID
-		dtl347.itemRefFullName = 'A&P:$100/hr'
+		dtl347.item = Items.get('140000-1069940598')
 		dtl347.description = 'Analysis & Programming Services (hours)'
 		dtl347.quantity = 12.5
 		dtl347.rate = 100.00
@@ -98,7 +98,7 @@ class InvoiceServiceTests {
 		def resultDtls = resultInv.detailLines
 		assert resultDtls.size() == 1
 		resultDtls.each { resultDtl ->
-			assert resultDtl.itemRefFullName == 'A&P:$100/hr'
+			assert resultDtl.item.fullName == 'A&P:$100.00/hr'
 			assert resultDtl.description == 'Analysis & Programming Services (hours)'
 			assert resultDtl.quantity == '12.5'
 			assert resultDtl.rate == '100.00'
@@ -110,6 +110,7 @@ class InvoiceServiceTests {
 	void testGetNextRefNumber() {
 		def arAccount = Account.findByFullName('Accounts Receivable')
 		def invLine = new InvoiceLineDetail(itemRefListID: 'ABC-123', quantity: 1)
+		invLine.item = Items.get('140000-1069940598')
 		def terms = StandardTerms.get('20000-929918818')
 		invLine.txnLineID = UUID.randomUUID().toString()
 		def inv205 = new Invoice(refNumber: '205')
@@ -159,8 +160,8 @@ class InvoiceServiceTests {
 		t1.txnID = 'TIME-1'
 		t1.txnDate = new Date()
 		t1.entityRefListID = '20000-929923144'
-		t1.customerRefListID = 'CD0000-1190818043'
-		t1.itemServiceRefListID = '140000-1069940598'
+		t1.customer = Customer.get('CD0000-1190818043')
+		t1.itemService = ItemService.get('140000-1069940598')
 		t1.durationInMinutes = 120
 		t1.billableStatus = 'Billable'
 		t1.status = ''
@@ -170,8 +171,8 @@ class InvoiceServiceTests {
 		t2.txnID = 'TIME-2'
 		t2.txnDate = new Date()
 		t2.entityRefListID = '20000-929923144'
-		t2.customerRefListID = 'CD0000-1190818043'
-		t2.itemServiceRefListID = '140000-1069940598'
+		t2.customer = Customer.get('CD0000-1190818043')
+		t2.itemService = ItemService.get('140000-1069940598')
 		t2.durationInMinutes = 30
 		t2.billableStatus = 'Billable'
 		t2.status = ''
@@ -181,8 +182,8 @@ class InvoiceServiceTests {
 		t3.txnID = 'TIME-3'
 		t3.txnDate = new Date()
 		t3.entityRefListID = '20000-929923144'
-		t3.customerRefListID = 'CD0000-1190818043'
-		t3.itemServiceRefListID = 'A0000-1011121334'
+		t3.customer = Customer.get('CD0000-1190818043')
+		t3.itemService = ItemService.get('A0000-1011121334')
 		t3.durationInMinutes = 60
 		t3.billableStatus = 'Billable'
 		t3.status = ''
@@ -192,8 +193,8 @@ class InvoiceServiceTests {
 		t4.txnID = 'TIME-4'
 		t4.txnDate = new Date()
 		t4.entityRefListID = '20000-929923144'
-		t4.customerRefListID = 'CD0000-1190818043'
-		t4.itemServiceRefListID = 'A0000-1011121334'
+		t4.customer = Customer.get('CD0000-1190818043')
+		t4.itemService = ItemService.get('A0000-1011121334')
 		t4.durationInMinutes = 30
 		t4.billableStatus = 'Billable'
 		t4.status = 'ADD'
@@ -249,13 +250,13 @@ class InvoiceServiceTests {
 		def invLines = inv.detailLines
 		assert invLines.size() == 2
 		InvoiceLineDetail line = invLines.find() {
-			it.itemRefListID == '140000-1069940598'
+			it.item.listID == '140000-1069940598'
 		}
 		assert StringUtils.isNotBlank(line.txnLineID)
 		assert line.quantity == '2.5'
 		
 		line = invLines.find() {
-			it.itemRefListID == 'A0000-1011121334'
+			it.item.listID == 'A0000-1011121334'
 		}
 		assert StringUtils.isNotBlank(line.txnLineID)
 		assert line.quantity == '1.5'

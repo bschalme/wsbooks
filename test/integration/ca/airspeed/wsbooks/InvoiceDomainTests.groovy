@@ -20,7 +20,7 @@ class InvoiceDomainTests {
 		inv.status = 'ADD'
 		InvoiceLineDetail invLine = new InvoiceLineDetail()
 		invLine.txnLineID = "DEF-456"
-		invLine.itemRefListID = "QRS-789"
+		invLine.item = Items.get('140000-1069940598')
 		invLine.quantity = 2
 		inv.addToDetailLines(invLine)
 		
@@ -34,6 +34,7 @@ class InvoiceDomainTests {
 		assert inv.detailLines?.size() == 1
 		for (line in inv.detailLines) {
 			assert line.txnLineID == 'DEF-456'
+			assert line.item.fullName == 'A&P:$100.00/hr'
 			assert line.invoice.txnID == 'ABC-123'
 		}
 	}

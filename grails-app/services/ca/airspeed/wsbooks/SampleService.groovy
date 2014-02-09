@@ -21,7 +21,7 @@ class SampleService {
 		def activeCusts = Customer.findAllByIsActive("true")
 		def haveBillableTimeEntries = false
 		activeCusts.each { cust ->
-			def timeEntries = TimeTracking.findAllByCustomerRefListIDAndBillableStatus(cust.id, 'Billable')
+			def timeEntries = TimeTracking.findAllByCustomerAndBillableStatus(cust, 'Billable')
 			def i = timeEntries.size()
 			if (i > 0) {
 				haveBillableTimeEntries = true

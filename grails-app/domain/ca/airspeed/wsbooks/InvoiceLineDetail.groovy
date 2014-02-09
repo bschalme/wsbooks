@@ -8,11 +8,8 @@ class InvoiceLineDetail {
 
 	static constraints = {
 		txnLineID(nullable: false)
-		itemRefListID(nullable: true)
+		item(nullable: false)
 		itemRefFullName(nullable: true)
-		itemRefListID validator: {val, obj ->
-			if (isBlank(val) && isBlank(obj.itemRefFullName)) return ['missing.item']
-		}
 		description(nullable: true)
 		quantity(nullable: false)
 		quantity validator: { val, obj ->
@@ -55,7 +52,7 @@ class InvoiceLineDetail {
 		version false
 		id column: 'TxnLineID', generator: 'assigned'
 		txnLineID column: 'TxnLineID'
-		itemRefListID column: 'ItemRef_ListID'
+		item column: 'ItemRef_ListID'
 		itemRefFullName column: 'ItemRef_FullName'
 		description column: 'Description'
 		quantity column: 'Quantity'
@@ -94,7 +91,7 @@ class InvoiceLineDetail {
 
 	static transients = ['txnLineID']
 	String txnLineID
-	String itemRefListID
+	Items item
 	String itemRefFullName
 	String description
 	String quantity

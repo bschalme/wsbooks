@@ -53,6 +53,7 @@ class InvoiceService {
 			newDtl.properties = it.properties
 			newDtl.txnLineID = UUID.randomUUID().toString()
 			newDtl.id = newDtl.txnLineID
+			newDtl.item = it.item
 			newInv.addToDetailLines(newDtl)
 		}
 		newInv.save(failOnError: true, flush: true)
@@ -78,7 +79,7 @@ class InvoiceService {
 		def resultInvoice = [:]
 		def resultLines = []
 		
-		def timeEntries = TimeTracking.findAllByCustomerRefListIDAndBillableStatus(customer.id, 'Billable')
+		def timeEntries = TimeTracking.findAllByCustomerAndBillableStatus(customer, 'Billable')
 		if (timeEntries.size() == 0) {
 			log.debug("No billable TimeTracking entries found for " + customer.fullName + ".")
 			return resultInvoice
@@ -113,32 +114,32 @@ class InvoiceService {
 		
 		def itemDurations = [:]
 		timeEntries.each  { entry ->
-			def i = itemDurations.get(entry.itemServiceRefListID)
+			def i = itemDurations.get(entry.itemService.listID)
 			if (i) {
 				log.debug('Existing InvoiceLineDetail')
-				itemDurations[entry.itemServiceRefListID] += entry.durationInMinutes
+				itemDurations[entry.itemService.listID] += entry.durationInMinutes
 			}
 			else {
 				log.debug('New InvoiceLineDetail')
-				itemDurations[entry.itemServiceRefListID] = entry.durationInMinutes
+				itemDurations[entry.itemService.listID] = entry.durationInMinutes
 			}
 		}
 		itemDurations.each { item ->
 			def line = new InvoiceLineDetail()
 			line.txnLineID = UUID.randomUUID().toString()
-			line.itemRefListID = item.key
+			line.item = Items.get(item.key)
 			line.quantity = item.value / 60
 			inv.addToDetailLines(line)
 			
 			def resultLine = [:]
-			resultLine.name = ItemService.get(line.itemRefListID)?.fullName
-			SalesOrPurchaseDetail spd = SalesOrPurchaseDetail.get(line.itemRefListID)
+			resultLine.name = ItemService.get(line.item.listID)?.fullName
+			SalesOrPurchaseDetail spd = SalesOrPurchaseDetail.get(line.item.listID)
 			resultLine.description = spd?.description
 			resultLine.quantity = item.value / 60
 			resultLine.unitCost = spd?.price.toBigDecimal()
-			log.debug('line.itemRefListID = ' + line.itemRefListID)
-			log.debug('ItemService.salesTaxCodeRefListID = ' + ItemService.get(line.itemRefListID).salesTaxCodeRefListID)
-			ItemSalesTax ist = ItemSalesTax.get(SalesTaxCode.get(ItemService.get(line.itemRefListID).salesTaxCodeRefListID).itemSalesTaxRefListID)
+			log.debug('line.item.listID = ' + line.item.listID)
+			log.debug('ItemService.salesTaxCodeRefListID = ' + ItemService.get(line.item.listID).salesTaxCodeRefListID)
+			ItemSalesTax ist = ItemSalesTax.get(SalesTaxCode.get(ItemService.get(line.item.listID).salesTaxCodeRefListID).itemSalesTaxRefListID)
 			def taxes = []
 			def tax = [:]
 			tax.name = ist?.name?.split()[0]
