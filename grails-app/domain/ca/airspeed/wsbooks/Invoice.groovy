@@ -25,7 +25,7 @@ class Invoice {
 			}
 		})
 		aRAccountRefFullName(nullable: true)
-		templateRefListID(nullable: true)
+		template(nullable: true)
 		templateRefFullName(nullable: true)
 		txnDate(nullable: false)
 		refNumber(nullable: false)
@@ -52,11 +52,8 @@ class Invoice {
 		isPending(nullable: true)
 		isFinanceCharge(nullable: true)
 		pONumber(nullable: true)
-		termsRefListID(nullable: true)
+		terms(nullable: false)
 		termsRefFullName(nullable: true)
-		termsRefListID validator: {val, obj ->
-			if (isBlank(val) && isBlank(obj.termsRefFullName)) return ['missing.terms']
-		}
 		dueDate(nullable: true)
 		salesRepRefListID(nullable: true)
 		salesRepRefFullName(nullable: true)
@@ -126,7 +123,7 @@ class Invoice {
 		classRefListID column: 'ClassRef_ListID'
 		classRefFullName column: 'ClassRef_FullName'
 		aRAccountRefFullName column: 'ARAccountRef_FullName'
-		templateRefListID column: 'TemplateRef_ListID'
+		template column: 'TemplateRef_ListID'
 		templateRefFullName column: 'TemplateRef_FullName'
 		txnDate column: 'TxnDate'
 		refNumber column: 'RefNumber'
@@ -153,7 +150,7 @@ class Invoice {
 		isPending column: 'IsPending'
 		isFinanceCharge column: 'IsFinanceCharge'
 		pONumber column: 'PONumber'
-		termsRefListID column: 'TermsRef_ListID'
+		terms column: 'TermsRef_ListID'
 		termsRefFullName column: 'TermsRef_FullName'
 		dueDate column: 'DueDate'
 		salesRepRefListID column: 'SalesRepRef_ListID'
@@ -213,7 +210,7 @@ class Invoice {
 	String classRefFullName
 	Account arAccount
 	String aRAccountRefFullName
-	String templateRefListID
+	Template template
 	String templateRefFullName
 	Date txnDate
 	String refNumber
@@ -240,7 +237,7 @@ class Invoice {
 	String isPending
 	String isFinanceCharge
 	String pONumber
-	String termsRefListID
+	StandardTerms terms
 	String termsRefFullName
 	Date dueDate
 	String salesRepRefListID

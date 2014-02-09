@@ -16,7 +16,7 @@ class InvoiceDomainTests {
 		inv.customer = Customer.get('CB0000-1190817876')
 		inv.txnDate = new Date()
 		inv.refNumber = '99999'
-		inv.termsRefFullName = 'Net 30'
+		inv.terms = StandardTerms.get('20000-929918818')
 		inv.status = 'ADD'
 		InvoiceLineDetail invLine = new InvoiceLineDetail()
 		invLine.txnLineID = "DEF-456"
@@ -29,6 +29,7 @@ class InvoiceDomainTests {
 		assert Invoice.list().size() == 1
 		inv = Invoice.list().get(0)
 		assert inv.arAccount.name == 'Accounts Receivable'
+		assert inv.terms.name == 'Net 30'
 		assert inv.refNumber == '99999'
 		assert inv.detailLines?.size() == 1
 		for (line in inv.detailLines) {

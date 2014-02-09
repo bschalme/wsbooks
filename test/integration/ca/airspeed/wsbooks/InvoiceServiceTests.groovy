@@ -43,7 +43,7 @@ class InvoiceServiceTests {
 		inv347.id = inv347.txnID
 		inv347.txnDate = new LocalDate().minusMonths(5).withDayOfMonth(1).toDate()
 		inv347.customer = Customer.get('800000EB-1251942204')
-		inv347.termsRefFullName = 'Net 30'
+		inv347.terms = StandardTerms.get('20000-929918818')
 		inv347.subtotal = 60
 		inv347.salesTaxPercentage = 5.00
 		inv347.salesTaxTotal = 3
@@ -87,6 +87,7 @@ class InvoiceServiceTests {
 		assert resultInv.balanceRemaining == 63
 		assert resultInv.isPaid == 'false'
 		assert resultInv.isToBePrinted == 'true'
+		assert resultInv.terms.name == 'Net 30'
 		def fromFmt = new SimpleDateFormat("MMM d")
 		def toFmt = new SimpleDateFormat("dd, yyyy")
 		def expectedOther = fromFmt.format(expectedTxnDate) + ' - ' + toFmt.format(new DateTime(expectedTxnDate).
@@ -109,6 +110,7 @@ class InvoiceServiceTests {
 	void testGetNextRefNumber() {
 		def arAccount = Account.findByFullName('Accounts Receivable')
 		def invLine = new InvoiceLineDetail(itemRefListID: 'ABC-123', quantity: 1)
+		def terms = StandardTerms.get('20000-929918818')
 		invLine.txnLineID = UUID.randomUUID().toString()
 		def inv205 = new Invoice(refNumber: '205')
 		inv205.txnID = UUID.randomUUID().toString()
@@ -116,7 +118,7 @@ class InvoiceServiceTests {
 		inv205.txnDate = new LocalDate().withDayOfMonth(1).toDate()
 		inv205.arAccount = arAccount
 		inv205.customer = Customer.get('800000EB-1251942204')
-		inv205.termsRefFullName = 'Net 30'
+		inv205.terms = terms
 		inv205.status = 'ADD'
 		inv205.addToDetailLines(invLine)
 		inv205.save(failOnError: true, flush: true)
@@ -127,7 +129,7 @@ class InvoiceServiceTests {
 		inv427.txnDate = new LocalDate().withDayOfMonth(1).toDate()
 		inv427.arAccount = arAccount
 		inv427.customer = Customer.get('CB0000-1190817876')
-		inv427.termsRefFullName = 'Net 30'
+		inv427.terms = terms
 		inv427.status = 'ADD'
 		inv427.addToDetailLines(invLine)
 		inv427.save(failOnError: true)
@@ -138,7 +140,7 @@ class InvoiceServiceTests {
 		inv99.txnDate = new LocalDate().withDayOfMonth(1).toDate()
 		inv99.arAccount = arAccount
 		inv99.customer = Customer.get('CB0000-1190817876')
-		inv99.termsRefFullName = 'Net 30'
+		inv99.terms = terms
 		inv99.status = 'ADD'
 		inv99.addToDetailLines(invLine)
 		inv99.save(failOnError: true, flush: true)
@@ -234,10 +236,11 @@ class InvoiceServiceTests {
 		assert inv.refNumber == '1'
 		assert inv.txnDate == endOfLastMonth
 		assert inv.arAccount.accountType == 'AccountsReceivable'
-		assert inv.templateRefListID == 'C0000-1078107584'
+		assert inv.template.listID == 'C0000-1078107584'
 		assert inv.customer.listID == 'CD0000-1190818043'
 		assert inv.customer.fullName == 'FNT:Website Hosting'
-		assert inv.termsRefListID == '20000-929918818'
+		assert inv.terms.listID == '20000-929918818'
+		assert inv.terms.name == 'Net 30'
 		assert inv.customerMsg.name?.startsWith('Questions concerning this invoice?')
 		assert inv.isToBePrinted == 'true'
 		assert inv.other == expectedOther

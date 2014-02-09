@@ -19,7 +19,7 @@ class InvoiceTests {
 	   assert "nullable" == inv.errors["txnDate"].code
 	   assert "nullable" == inv.errors["refNumber"].code
 	   assert "nullable" == inv.errors["arAccount"].code
-	   assert "missing.terms" == inv.errors["termsRefListID"].code
+	   assert "nullable" == inv.errors["terms"].code
 	   
 	   inv.txnID = 'ABC-123'
 	   inv.arAccount = new Account()
@@ -27,11 +27,12 @@ class InvoiceTests {
 	   inv.txnDate = new Date()
 	   inv.refNumber = '99999'
 	   inv.customerMsg = new CustomerMsg()
-	   inv.termsRefFullName = 'Net 30'
+	   inv.terms = new StandardTerms(listID: '20000-929918818', name: 'Net 30')
 	   inv.status = 'ZZZZ'
 	   assert !inv.validate()
 	   assert "not.inList" == inv.errors["status"].code
 	   assert "account.must.be.ar" == inv.errors["arAccount"].code
+	   assert inv.terms.name == 'Net 30'
 	   
 	   assert "nullable" == inv.errors["detailLines"]?.find{ it.code == 'nullable'}.code
 	   Set<InvoiceLineDetail> details = new HashSet<InvoiceLineDetail>()

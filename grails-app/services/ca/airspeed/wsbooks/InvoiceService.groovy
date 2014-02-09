@@ -90,8 +90,8 @@ class InvoiceService {
 		inv.txnDate = invoiceDate
 		// ToDo: Make these configurable items:
 		inv.arAccount = Account.get('3F0000-930012744')
-		inv.templateRefListID = 'C0000-1078107584'
-		inv.termsRefListID = '20000-929918818'
+		inv.template = Template.get('C0000-1078107584')
+		inv.terms = StandardTerms.get('20000-929918818')
 		inv.customerMsg = CustomerMsg.get('70000-951878262')
 		inv.customer = customer
 		inv.isToBePrinted = 'true'
@@ -106,7 +106,7 @@ class InvoiceService {
 		// ToDo: Refactor, since this assumes the immediate parent is the top-level Customer:
 		resultInvoice.clientID = inv.customer.parent?.listID
 		resultInvoice.date = inv.txnDate
-		resultInvoice.terms = StandardTerms.get(inv.termsRefListID)?.name
+		resultInvoice.terms = inv.terms.name
 		resultInvoice.period = inv.other
 		// ToDo: Make this into a configuration item:
 		resultInvoice.notes = 'Airspeed Consulting is a division of 4020774 Manitoba Ltd.'
