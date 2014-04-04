@@ -14,6 +14,7 @@ import org.junit.*
 class TimesheetServiceTests {
 	def timesheetService
 
+	@Test
     void testFetchFromTsheets() {
         timesheetService.fetchTimesheetsFromTsheets()
     }

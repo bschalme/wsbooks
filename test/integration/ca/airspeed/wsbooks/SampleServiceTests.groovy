@@ -16,6 +16,7 @@ class SampleServiceTests {
 	
 	def sampleService
 
+	@Test
     void testSomething() {
         sampleService.doSomeWork()
     }

@@ -2,6 +2,7 @@ package ca.airspeed.wsbooks
 
 
 
+import static org.junit.Assert.*;
 import grails.test.mixin.*
 
 import org.joda.time.DateTime;
@@ -14,6 +15,7 @@ class TsheetsServiceTests {
 	def tsheetsService
 	def freshbooksApiConn
 	 
+	@Test
 	void testGetToken() {
 		assert tsheetsService != null
 		// assert sampleService.getConfigParm() == 'Airspeed Consulting'
@@ -27,6 +29,7 @@ class TsheetsServiceTests {
 		// tsheetsService.checkStatus()
 	}
 	
+	@Test
 	void testGetTimesheets() {
 		assert tsheetsService != null
 		DateTime yesterday = new DateTime().minusDays(1)
@@ -34,6 +37,7 @@ class TsheetsServiceTests {
 		assert timesheetsJson != null
 	}
 	
+	@Test
 	void testFreshbooks() {
 		assert freshbooksApiConn  != null
 		def inv = freshbooksApiConn.getInvoice(331330)

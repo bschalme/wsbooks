@@ -23,6 +23,7 @@ class RecurrenceServiceTests {
 		}
 	}
 
+	@Test
 	void testIncrementMonthly() {
 		def r = new Recurrence(nickname:"Web hosting for MegaCorp",
 		entityName:"Invoice",
@@ -41,6 +42,7 @@ class RecurrenceServiceTests {
 		assert r.nextRunDate == new LocalDate().plusMonths(2).withDayOfMonth(1).toDate()
 	}
 	
+	@Test
 	void testIncrementFinalRecurrence() {
 		def r = new Recurrence(nickname:"Web hosting for MegaCorp",
 			entityName:"Invoice",
