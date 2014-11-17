@@ -1,7 +1,5 @@
 package ca.airspeed.wsbooks
 
-
-
 import java.awt.GraphicsConfiguration.DefaultBufferCapabilities;
 
 import grails.test.mixin.*
