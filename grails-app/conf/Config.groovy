@@ -5,8 +5,6 @@ import static org.quartz.TriggerBuilder.*;
 
 import java.text.SimpleDateFormat;
 
-import grails.plugin.quartz2.ClosureJob;
-import grails.plugin.quartz2.InvokeMethodJob
 import org.joda.time.DateTime
 import org.quartz.Job
 import org.quartz.JobDataMap
@@ -19,13 +17,13 @@ import ca.airspeed.wsbooks.Customer;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
 
-grails.config.locations = [ "classpath:${appName}-config.properties",
-                            "classpath:${appName}-config.groovy",
+grails.config.locations = [ "classpath:${appName}-config.groovy",
+                            "classpath:${appName}-quartz-config.groovy",
                             "file:${userHome}/.grails/${appName}-config.properties",
-                            "file:${userHome}/.grails/${appName}-config.groovy"]
-grails.config.locations << [ "file:/apps/conf/${appName}-config.properties",
-	                         "file:D:/apps/conf/${appName}-config.groovy"]
-grails.config.locations << [ "file:/apps/conf/${appName}-quartz-config.groovy",
+                            "file:${userHome}/.grails/${appName}-config.groovy",
+                            "file:/apps/conf/${appName}-config.properties",
+	                        "file:D:/apps/conf/${appName}-config.groovy",
+                            "file:/apps/conf/${appName}-quartz-config.groovy",
                             "file:${userHome}/.grails/${appName}-quartz-config.groovy"]
 
 // if (System.properties["${appName}.config.location"]) {
@@ -90,155 +88,6 @@ environments {
     }
 }
 
-// Scheduled jobs
-grails.plugin.quartz2.autoStartup = true
-
-org{
-	quartz{
-		//anything here will get merged into the quartz.properties so you don't need another file
-		scheduler.instanceName = 'WsBooksScheduler'
-		threadPool.class = 'org.quartz.simpl.SimpleThreadPool'
-		threadPool.threadCount = 20
-		threadPool.threadsInheritContextClassLoaderOfInitializingThread = true
-		jobStore.class = 'org.quartz.simpl.RAMJobStore'
-	}
-}
-
-grails.plugin.quartz2.jobSetup.statusCheck = { quartzScheduler, ctx ->
-	def props = new JobDataMap([targetObject:ctx.sampleService,targetMethod:'checkStatus'])
-	JobDetail statusJobDetail = newJob(InvokeMethodJob.class) //use the static helper newJob from org.quartz.JobBuilder
-		.withIdentity("Status Check")
-		.usingJobData(props)
-		.build()
-	
-	def statusTrigger = newTrigger().withIdentity("Status Trigger")
-		.withSchedule(dailyAtHourAndMinute(00, 5))
-		.startNow()
-		.build()
-		
-	// quartzScheduler.scheduleJob(statusJobDetail, statusTrigger)
-}
-
-grails.plugin.quartz2.jobSetup.fetchFromTsheets = { quartzScheduler, ctx ->
-	def props = new JobDataMap([targetObject:ctx.timesheetService,targetMethod:'fetchTimesheetsFromTsheets'])
-	JobDetail jobDetail = newJob(InvokeMethodJob.class) //use the static helper newJob from org.quartz.JobBuilder
-		.withIdentity("Fetch Timesheets")
-		.usingJobData(props)
-		.build()
-
-	Trigger trigger = newTrigger().withIdentity("Timesheet Trigger")
-		.withSchedule(
-			// simpleSchedule().withIntervalInSeconds(1).repeatForever()
-			dailyAtHourAndMinute(00, 15)
-		)
-		.startNow().build()
-
-	quartzScheduler.scheduleJob(jobDetail, trigger)
-}
-
-grails.plugin.quartz2.jobSetup.doSomeWork = { quartzScheduler, ctx ->
-	def props = new JobDataMap([targetObject:ctx.sampleService,targetMethod:'doSomeWork'])
-	JobDetail jobDetail = newJob(InvokeMethodJob.class) //use the static helper newJob from org.quartz.JobBuilder
-		.withIdentity("take the ride")
-		.usingJobData(props)
-		.build()
-
-	Trigger trigger = newTrigger().withIdentity("hunter trigger")
-		.withSchedule(
-			// simpleSchedule().withIntervalInSeconds(1).repeatForever()
-			dailyAtHourAndMinute(04, 20)
-		)
-		.startNow().build()
-
-	quartzScheduler.scheduleJob(jobDetail, trigger)
-}
-
-grails.plugin.quartz2.jobSetup.testInvoice = { quartzScheduler, ctx ->
-	def testInvoiceJob = ClosureJob.createJob(name:'Test_Invoice_Job', durability:true, concurrent:false) { jobCtx, appCtx ->
-        def inv = [:]
-		def line = [:]
-		def lines = []
-
-		def endOfLastMonth = new DateTime().withDayOfMonth(1).minusDays(1).toDate()
-		def beginningOfLastMonth = new DateTime().minusMonths(1).withDayOfMonth(1).toDate()
-		def startOfMonthFm = new SimpleDateFormat('MMM d')
-		def endOfMonthFm = new SimpleDateFormat('d, yyyy')
-
-		inv.invoiceNumber = '7'
-		inv.sourceSystem = 'QuickBooks'
-		inv.clientID = 'CB0000-1190817876'
-		inv.date = endOfLastMonth
-		inv.terms = 'Net 30'
-		def expectedOther = startOfMonthFm.format(beginningOfLastMonth) + ' - '  + endOfMonthFm.format(endOfLastMonth)
-		inv.period = expectedOther
-		inv.notes = 'Airspeed Consulting is a division of 4020774 Manitoba Ltd.'
-		line.name = 'A&P:$100.00/hr'
-		line.description = 'Analysis & Programming Services'
-		line.quantity = 2.5
-		line.unitCost = 100.00
-		def taxes = []
-		def tax = [:]
-		tax.name = 'GST'
-		tax.percent = 5.00
-		taxes << tax
-		line.taxes = taxes
-		lines << line
-		inv.lines = lines
-		if (inv?.invoiceNumber != null) {
-			def fbInv = appCtx.freshbooksService.createInvoice(inv)
-			def fbInvId = appCtx.freshbooksApiConn.createInvoice(fbInv)
-			println 'fbInvId = ' + fbInvId
-			appCtx.freshbooksApiConn.sendInvoiceByEmail(fbInvId)
-		}
-	}
-	
-	def testInvoiceTrigger = newTrigger().withIdentity("Test Invoice Trigger")
-		.withSchedule(monthlyOnDayAndHourAndMinute(1, 20, 52))
-		.startNow()
-		.build()
-		
-	// quartzScheduler.scheduleJob(testInvoiceJob, testInvoiceTrigger)
-}
-
-grails.plugin.quartz2.jobSetup.monthlyInvoice = { quartzScheduler, ctx ->
-	def invoiceJob = ClosureJob.createJob(name:'Monthly_Invoice_Job', durability:true, concurrent:false) { jobCtx, appCtx ->
-		def activeCusts = Customer.findAllByIsActive("true")
-		def endOfLastMonth = new DateTime().withDayOfMonth(1).minusDays(1).toDate()
-		activeCusts.each { cust ->
-			def inv = appCtx.invoiceService.createTimeByCustomerAndDate(cust, endOfLastMonth)
-			if (inv?.invoiceNumber != null) {
-				def fbInv = appCtx.freshbooksService.createInvoice(inv)
-				def fbInvId = appCtx.freshbooksApiConn.createInvoice(fbInv)
-				println 'fbInvId = ' + fbInvId
-				appCtx.freshbooksApiConn.sendInvoiceByEmail(fbInvId)
-			}
-		}
-	}
-	
-	def invoiceTrigger = newTrigger().withIdentity("Invoice Trigger")
-		.withSchedule(monthlyOnDayAndHourAndMinute(1, 4, 25))
-		.startNow()
-		.build()
-		
-	quartzScheduler.scheduleJob(invoiceJob, invoiceTrigger)
-}
-
-grails.plugin.quartz2.jobSetup.logEndOfJob = { quartzScheduler, ctx ->
-	def props = new JobDataMap([targetObject:ctx.sampleService,targetMethod:'logEndOfJob'])
-	JobDetail eojJobDetail = newJob(InvokeMethodJob.class) //use the static helper newJob from org.quartz.JobBuilder
-		.withIdentity("Log the end of job")
-		.usingJobData(props)
-		.build()
-
-	Trigger eojTrigger = newTrigger().withIdentity("End of job trigger")
-		.withSchedule(
-			// simpleSchedule().withIntervalInSeconds(1).repeatForever()
-			dailyAtHourAndMinute(04, 30)
-		)
-		.startNow().build()
-
-	quartzScheduler.scheduleJob(eojJobDetail, eojTrigger)
-}
 
 
 // Uncomment and edit the following lines to start using Grails encoding & escaping improvements

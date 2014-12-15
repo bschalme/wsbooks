@@ -65,7 +65,9 @@ grails.project.dependency.resolution = {
 
         runtime ":database-migration:1.3.8"
 
-        compile ':cache:1.0.0'
+        compile ':cache:1.1.8'
+		compile ":quartz:1.0.2"
+		compile ":quartz-monitor:1.0"
 		compile ":rest-client-builder:1.0.3"
     }
 	
