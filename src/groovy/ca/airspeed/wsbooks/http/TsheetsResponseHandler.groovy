@@ -4,9 +4,9 @@ import static org.springframework.http.HttpStatus.OK
 
 class TsheetsResponseHandler {
 
-	def handle(Object response) {
-		if (response.statusCode == OK) {
-			return response.body.toString()
+	def handle(Object theResponse) {
+		if (theResponse?.statusCode == OK) {
+			return theResponse.body.toString()
 		}
 		return ""
 	}

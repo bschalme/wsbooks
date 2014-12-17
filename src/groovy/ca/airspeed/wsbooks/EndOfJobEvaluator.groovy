@@ -3,6 +3,7 @@
  */
 package ca.airspeed.wsbooks
 
+import static org.apache.commons.lang3.StringUtils.containsIgnoreCase
 import org.apache.log4j.spi.LoggingEvent
 import org.apache.log4j.spi.TriggeringEventEvaluator;
 
@@ -17,7 +18,7 @@ class EndOfJobEvaluator implements TriggeringEventEvaluator {
 	 */
 	@Override
 	public boolean isTriggeringEvent(LoggingEvent event) {
-		return event.getRenderedMessage().contains("End of job");
+		return containsIgnoreCase(event.getRenderedMessage(), "End of job");
 	}
 
 }

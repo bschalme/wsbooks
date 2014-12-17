@@ -40,6 +40,7 @@ grails.project.dependency.resolution = {
 		runtime 'javax.mail:mail:1.4.7'
 		runtime 'javax.activation:activation:1.1.1'
 		compile 'com.freshbooks:freshbooksApiClient:1.0-SNAPSHOT'
+		compile 'org.apache.commons:commons-lang3:3.3.2'
 		// compile 'org.grails.plugins:logback:0.3.1'
 		// compile 'org.slf4j:slf4j-api:1.7.5'
 		// compile 'org.slf4j:jcl-over-slf4j:1.7.5'
