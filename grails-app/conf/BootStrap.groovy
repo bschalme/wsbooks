@@ -1,8 +1,27 @@
+import ca.airspeed.wsbooks.Control;
+
 class BootStrap {
 	
 	def grailsApplication
 
     def init = { servletContext ->
+		seedDatabase()
+		initializeJobs()
+    }
+
+	def destroy = {
+    }
+
+	private void seedDatabase() {
+		def controlData = Control.findAll()
+		if (!controlData) {
+			Control seedControl = new Control()
+			seedControl.tsheetsLastFetchedDate = new Date()
+			seedControl.save(failOnError: true, flush: true)
+		}
+	}
+
+	private void initializeJobs() {
 		def jobs = grailsApplication.config.quartzJobs.jobs
     	if (jobs) {
             jobs.each { job, details ->
@@ -17,8 +36,5 @@ class BootStrap {
                 }
             }
         }
-    }
-
-	def destroy = {
-    }
+	}
 }

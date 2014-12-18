@@ -48,7 +48,7 @@ environments {
     }
     production {
         dataSource {
-            dbCreate = "validate"
+            dbCreate = "update"
 			dialect = org.hibernate.dialect.MySQLInnoDBDialect
 			driverClassName = 'com.mysql.jdbc.Driver'
             url = ""
