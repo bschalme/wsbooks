@@ -12,8 +12,7 @@
 		<div class="nav" role="navigation">
 			<ul>
 				<li><a class="home" href="${createLink(uri: '/')}"><g:message code="default.home.label"/></a></li>
-				<li><g:link class="list" action="list"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
-				<li><g:link class="create" action="create"><g:message code="default.new.label" args="[entityName]" /></g:link></li>
+				<li><g:link class="list" action="index"><g:message code="default.list.label" args="[entityName]" /></g:link></li>
 			</ul>
 		</div>
 		<div id="show-control" class="content scaffold-show" role="main">
@@ -23,21 +22,28 @@
 			</g:if>
 			<ol class="property-list control">
 			
+				<g:if test="${controlInstance?.rowName}">
+				<li class="fieldcontain">
+					<span id="rowName-label" class="property-label"><g:message code="control.rowName.label" default="Row Name" /></span>
+					
+						<span class="property-value" aria-labelledby="rowName-label"><g:fieldValue bean="${controlInstance}" field="rowName"/></span>
+					
+				</li>
+				</g:if>
+			
 				<g:if test="${controlInstance?.tsheetsLastFetchedDate}">
 				<li class="fieldcontain">
 					<span id="tsheetsLastFetchedDate-label" class="property-label"><g:message code="control.tsheetsLastFetchedDate.label" default="Tsheets Last Fetched Date" /></span>
 					
-						<span class="property-value" aria-labelledby="tsheetsLastFetchedDate-label"><g:formatDate date="${controlInstance?.tsheetsLastFetchedDate}" format="EEE, MMM dd, yyyy"/></span>
+						<span class="property-value" aria-labelledby="tsheetsLastFetchedDate-label"><g:formatDate format="EEE MMM dd, yyyy" date="${controlInstance?.tsheetsLastFetchedDate}" /></span>
 					
 				</li>
 				</g:if>
 			
 			</ol>
-			<g:form>
+			<g:form url="[resource:controlInstance, action:'delete']" method="DELETE">
 				<fieldset class="buttons">
-					<g:hiddenField name="id" value="${controlInstance?.id}" />
-					<g:link class="edit" action="edit" id="${controlInstance?.id}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
-					<g:actionSubmit class="delete" action="delete" value="${message(code: 'default.button.delete.label', default: 'Delete')}" onclick="return confirm('${message(code: 'default.button.delete.confirm.message', default: 'Are you sure?')}');" />
+					<g:link class="edit" action="edit" resource="${controlInstance}"><g:message code="default.button.edit.label" default="Edit" /></g:link>
 				</fieldset>
 			</g:form>
 		</div>

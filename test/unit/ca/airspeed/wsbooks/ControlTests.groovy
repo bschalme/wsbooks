@@ -14,6 +14,7 @@ class ControlTests {
     void testConstraints() {
        def control = new Control(tsheetsLastFetchedDate:null)
 	   assert !control.validate()
+	   control.rowName = "Test Row"
 	   control.tsheetsLastFetchedDate = new Date()
 	   assert control.validate()
     }

@@ -16,6 +16,7 @@ class BootStrap {
 		def controlData = Control.findAll()
 		if (!controlData) {
 			Control seedControl = new Control()
+			seedControl.rowName = "Control Record"
 			seedControl.tsheetsLastFetchedDate = new Date()
 			seedControl.save(failOnError: true, flush: true)
 		}
