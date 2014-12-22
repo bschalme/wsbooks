@@ -1,3 +1,6 @@
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+
 import ca.airspeed.wsbooks.Control;
 
 class BootStrap {
@@ -17,7 +20,7 @@ class BootStrap {
 		if (!controlData) {
 			Control seedControl = new Control()
 			seedControl.rowName = "Control Record"
-			seedControl.tsheetsLastFetchedDate = new Date()
+			seedControl.tsheetsLastFetchedDate = new LocalDate().toDate()
 			seedControl.save(failOnError: true, flush: true)
 		}
 	}

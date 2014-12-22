@@ -1,25 +1,48 @@
 package ca.airspeed.wsbooks
 
+import static java.lang.String.format
+import static org.joda.time.Days.daysBetween
+import groovy.json.JsonOutput;
+import groovy.json.JsonSlurper;
+
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 
 class TimesheetService {
-	def tsheetsService
 
-    def fetchTimesheetsFromTsheets() {
-		assert tsheetsService != null
+	def grailsApplication
+	def tsheetsRestService
+
+	def fetchTimesheetsFromTsheets() {
+		assert tsheetsRestService != null
 		def nf = NumberFormat.getInstance()
 		nf.setMinimumIntegerDigits(1)
 		nf.setMinimumFractionDigits(2)
-		DateTime yesterday = new DateTime().minusDays(1)
-		def tsheetsTimesheets = tsheetsService.findTimesheetsByDateBetween(yesterday.toDate(), yesterday.toDate())
-		def dayTotal = 0.00
 		def df = new SimpleDateFormat('EEE, MMM d')
-		tsheetsTimesheets.each{ ts ->
-			dayTotal += ts.total_hours.toFloat()
+		def controlRecord = Control.findByRowName("Control Record")
+		DateTime lastFetchedDate = new DateTime(controlRecord.tsheetsLastFetchedDate)
+		DateTime yesterday = new DateTime().minusDays(1)
+		if (lastFetchedDate.isAfter(yesterday)) {
+			log.info(format("TSheets Timesheets will be fetched two days after %s. None were fetched this time.", df.format(lastFetchedDate.toDate())))
+			return
 		}
-		log.info('TSheets has ' + nf.format(dayTotal) + ' hours for ' + df.format(yesterday.toDate()) + '.')
-    }
+		if (daysBetween(lastFetchedDate, yesterday) < Days.ONE) {
+			log.info("TSheets Timesheets will be fetched tomorrow. None were fetched this time.")
+			return
+		}
+		def jsonSlurper = new JsonSlurper()
+		def tsheetsTimesheets = tsheetsRestService.findTimesheetsByDateBetween(lastFetchedDate.plusDays(1).toDate(), yesterday.toDate())
+		def json = jsonSlurper.parseText(tsheetsTimesheets)
+		def dayTotal = 0.00
+		json.results.timesheets.each{ ts ->
+			println ts
+			dayTotal += ts.value.duration.toFloat() / 3600f
+		}
+		log.info(format('REST-fully speaking, TSheets has %s hours between %s and %s.', nf.format(dayTotal), df.format(lastFetchedDate.plusDays(1).toDate()), df.format(yesterday.toDate())))
+		controlRecord.tsheetsLastFetchedDate = yesterday.toDate()
+		controlRecord.save(failOnError: true, flush: true)
+	}
 }

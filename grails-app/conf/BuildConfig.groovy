@@ -36,7 +36,7 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         compile 'mysql:mysql-connector-java:5.1.23'
-		compile 'joda-time:joda-time:2.1'
+		compile 'joda-time:joda-time:2.6'
 		runtime 'javax.mail:mail:1.4.7'
 		runtime 'javax.activation:activation:1.1.1'
 		compile 'com.freshbooks:freshbooksApiClient:1.0-SNAPSHOT'
