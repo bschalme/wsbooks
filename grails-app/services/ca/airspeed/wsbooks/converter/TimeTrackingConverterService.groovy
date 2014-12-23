@@ -25,8 +25,8 @@ class TimeTrackingConverterService {
 			Integer minutes = Integer.valueOf(it.value.duration) / 60
 			qbTime.duration = 'PT' + ((Integer)minutes / 60) + 'H' + minutes % 60 + 'M'
 			def jobcodeXref = TsheetsJobcodeXref.findByTsheetsJobcodeId(it.value.jobcode_id)
-			qbTime.customer = Customer.get(jobcodeXref.qbCustomerListId)
-			qbTime.itemService = ItemService.get(jobcodeXref.qbItemServiceListId)
+			qbTime.customer = Customer.get(jobcodeXref?.qbCustomerListId)
+			qbTime.itemService = ItemService.get(jobcodeXref?.qbItemServiceListId)
 			def startTime = new DateTime(it.value.start).toDate()
 			def endTime = new DateTime(it.value.end).toDate()
 			def df = new SimpleDateFormat("HHmm")

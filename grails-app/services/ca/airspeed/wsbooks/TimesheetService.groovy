@@ -15,6 +15,7 @@ class TimesheetService {
 
 	def grailsApplication
 	def tsheetsRestService
+	def timeTrackingConverterService
 
 	def fetchTimesheetsFromTsheets() {
 		assert tsheetsRestService != null
@@ -42,6 +43,12 @@ class TimesheetService {
 			dayTotal += ts.value.duration.toFloat() / 3600f
 		}
 		log.info(format('REST-fully speaking, TSheets has %s hours between %s and %s.', nf.format(dayTotal), df.format(lastFetchedDate.plusDays(1).toDate()), df.format(yesterday.toDate())))
+		def qbTimeTrackingList = timeTrackingConverterService.convertFromTsheetsTimesheets(json)
+		log.info(format("I would create the following %d TimeTracking entries.", qbTimeTrackingList.size()))
+		qbTimeTrackingList.each {
+			log.info(format("id: %s, txnDate: %s, entity: %s, duration: %s, Customer: %s, Service Item: %s",
+				it.txnID, it.txnDate, it.entityRefListID, it.duration, it.customer?.fullName, it.itemService?.fullName))
+		}
 		controlRecord.tsheetsLastFetchedDate = yesterday.toDate()
 		controlRecord.save(failOnError: true, flush: true)
 	}
