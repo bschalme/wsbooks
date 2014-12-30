@@ -8,6 +8,7 @@ import groovy.json.JsonSlurper;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
+import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 
@@ -24,8 +25,8 @@ class TimesheetService {
 		nf.setMinimumFractionDigits(2)
 		def df = new SimpleDateFormat('EEE, MMM d')
 		def controlRecord = Control.findByRowName("Control Record")
-		DateTime lastFetchedDate = new DateTime(controlRecord.tsheetsLastFetchedDate)
-		DateTime yesterday = new DateTime().minusDays(1)
+		DateTime lastFetchedDate = new DateTime(controlRecord.tsheetsLastFetchedDate).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0)
+		DateMidnight yesterday = new DateMidnight().minusDays(1)
 		if (lastFetchedDate.isAfter(yesterday)) {
 			log.info(format("TSheets Timesheets will be fetched two days after %s. None were fetched this time.", df.format(lastFetchedDate.toDate())))
 			return
@@ -42,7 +43,7 @@ class TimesheetService {
 			println ts
 			dayTotal += ts.value.duration.toFloat() / 3600f
 		}
-		log.info(format('TSheets has %s hours between %s and %s. Adding them to QuickBooks.', 
+		log.info(format('TSheets has %s hours between %s and %s.', 
 			nf.format(dayTotal), df.format(lastFetchedDate.plusDays(1).toDate()), df.format(yesterday.toDate())))
 		def qbTimeTrackingList = timeTrackingConverterService.convertFromTsheetsTimesheets(json)
 		qbTimeTrackingList.each {

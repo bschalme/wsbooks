@@ -1,3 +1,4 @@
+import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
@@ -20,7 +21,7 @@ class BootStrap {
 		if (!controlData) {
 			Control seedControl = new Control()
 			seedControl.rowName = "Control Record"
-			seedControl.tsheetsLastFetchedDate = new LocalDate().toDate()
+			seedControl.tsheetsLastFetchedDate = new DateMidnight().minusDays(1).toDate()
 			seedControl.save(failOnError: true, flush: true)
 		}
 	}

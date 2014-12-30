@@ -2,6 +2,7 @@ package ca.airspeed.wsbooks
 
 import grails.test.mixin.*
 
+import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.junit.*
 
@@ -31,7 +32,7 @@ class TimesheetServiceTests {
 	@Test
     void testFetchFromTsheets() {
 		Control ctl = Control.findByRowName("Control Record")
-		ctl.tsheetsLastFetchedDate = new DateTime().minusDays(2).toDate()
+		ctl.tsheetsLastFetchedDate = new DateMidnight().minusDays(2).toDate()
 		ctl.save(failOnError: true, flush: true)
         timesheetService.fetchTimesheetsFromTsheets()
     }
