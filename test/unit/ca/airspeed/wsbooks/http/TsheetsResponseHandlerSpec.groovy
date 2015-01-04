@@ -1,19 +1,26 @@
 package ca.airspeed.wsbooks.http
 
+import ca.airspeed.wsbooks.exception.TsheetsException;
+
 import static org.springframework.http.HttpStatus.OK
+import static org.springframework.http.HttpStatus.UNAUTHORIZED
 
-import org.codehaus.groovy.grails.plugins.testing.GrailsMockHttpServletResponse;
-import org.springframework.mock.web.MockHttpServletResponse;
-
-import grails.plugins.rest.client.RestResponse;
+import grails.plugins.rest.client.ErrorResponse
+import grails.plugins.rest.client.RestResponse
 import grails.test.mixin.TestFor;
 import grails.test.mixin.TestMixin;
 import grails.test.mixin.support.GrailsUnitTestMixin;
+import groovy.json.JsonBuilder;
+import org.springframework.http.ResponseEntity
+import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Specification
 
 class TsheetsResponseHandlerSpec extends Specification {
 	
+	def tsheetsResponseHandler
+	
 	def setup() {
+		tsheetsResponseHandler = new TsheetsResponseHandler()
 	}
 
 	def cleanup() {
@@ -21,17 +28,29 @@ class TsheetsResponseHandlerSpec extends Specification {
 
 	void "test 200 OK"() {
 		given:
-		def tsheetsResponseHandler = new TsheetsResponseHandler()
-		RestResponse myResponse = new RestResponse()
-		// response.status = 200
-		// response.body = "Hello World!"
+		def builder = new JsonBuilder()
+		def root = builder.call([message : "Hello World!"])
+		def responseEntity = new ResponseEntity(builder.toPrettyString(), OK)
+		def myResponse = new RestResponse(responseEntity: responseEntity)
 
 		when:
-		// Yeah, believe it or not, the class under test will think myResponse is a null object!
-		def results = "Hello World!" // tsheetsResponseHandler.handle(myResponse)
+		def results = tsheetsResponseHandler.handle(myResponse)
 
 		then:
-		results == "Hello World!"
+		results.message == "Hello World!"
 	}
 
+	void "test 401 Unauthorized"() {
+		given:
+		def builder = new JsonBuilder()
+		def root = builder.call([error : "invalid_grant", error_description : "The access token provided has expired"])
+		def statusCodeException = new HttpClientErrorException(UNAUTHORIZED, UNAUTHORIZED.reasonPhrase, builder.toPrettyString().bytes, null)
+		def myResponse = new ErrorResponse(error:statusCodeException)
+		
+		when:
+		def results = tsheetsResponseHandler.handle(myResponse)
+
+		then:
+		thrown(TsheetsException)
+	}
 }

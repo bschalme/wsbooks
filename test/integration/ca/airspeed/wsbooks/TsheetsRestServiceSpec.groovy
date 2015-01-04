@@ -1,5 +1,6 @@
 package ca.airspeed.wsbooks
 
+import org.joda.time.DateMidnight
 import org.joda.time.DateTime;
 
 import grails.test.spock.IntegrationSpec;
@@ -30,13 +31,15 @@ class TsheetsRestServiceSpec extends Specification {
 		json.results.last_modified_timestamps.current_user != ""
     }
 
-	void "get timesheets from yesterday"() {
-		Date yesterday = new DateTime().minusDays(1).toDate()
-		def jsonSlurper = new JsonSlurper()
-		def result = jsonSlurper.parseText(tsheetsRestService.findTimesheetsByDateBetween(yesterday, yesterday))
+	void "get timesheets"() {
+		Date theDay = new DateMidnight(2014, 12, 22).toDate()
+		def result = tsheetsRestService.findTimesheetsByDateBetween(theDay, theDay)
 		
 		expect:
 		result != null
-		result.results.timesheets != null
+		result.results.timesheets?.size() > 2
+		def timesheet = result.results.timesheets."179687502"
+		assert timesheet.user_id == 186512
+		assert timesheet.jobcode_id == 7842272
 	}
 }

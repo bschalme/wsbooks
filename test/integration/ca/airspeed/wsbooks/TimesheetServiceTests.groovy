@@ -34,6 +34,11 @@ class TimesheetServiceTests {
 		Control ctl = Control.findByRowName("Control Record")
 		ctl.tsheetsLastFetchedDate = new DateMidnight().minusDays(2).toDate()
 		ctl.save(failOnError: true, flush: true)
-        timesheetService.fetchTimesheetsFromTsheets()
+
+		def timesheets = timesheetService.fetchTimesheetsFromTsheets()
+
+		assert timesheets.results.timesheets != null
+		ctl = Control.findByRowName("Control Record")
+		assert ctl.tsheetsLastFetchedDate == new DateMidnight().minusDays(1).toDate()
     }
 }

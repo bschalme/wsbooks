@@ -35,9 +35,7 @@ class TimesheetService {
 			log.info("TSheets Timesheets will be fetched tomorrow. None were fetched this time.")
 			return
 		}
-		def jsonSlurper = new JsonSlurper()
-		def tsheetsTimesheets = tsheetsRestService.findTimesheetsByDateBetween(lastFetchedDate.plusDays(1).toDate(), yesterday.toDate())
-		def json = jsonSlurper.parseText(tsheetsTimesheets)
+		def json = tsheetsRestService.findTimesheetsByDateBetween(lastFetchedDate.plusDays(1).toDate(), yesterday.toDate())
 		def dayTotal = 0.00
 		json.results.timesheets.each{ ts ->
 			println ts
@@ -53,5 +51,6 @@ class TimesheetService {
 		}
 		controlRecord.tsheetsLastFetchedDate = yesterday.toDate()
 		controlRecord.save(failOnError: true, flush: true)
+		return json
 	}
 }

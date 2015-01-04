@@ -29,11 +29,11 @@ class SampleService {
 				timeEntries.each { e ->
 					mm += e.durationInMinutes
 				}
-				log.info(cust.fullName + ' has ' + i + ' billable TimeTracking entries for ' + nf.format(mm / 60) + ' hours.')
+				log.info('QuickBooks ' + cust.fullName + ' has ' + i + ' billable TimeTracking entries for ' + nf.format(mm / 60) + ' hours.')
 			}
 		}
 		if (!haveBillableTimeEntries) {
-			log.info('No billable TimeTracking entries found.')
+			log.info('QuickBooks has no billable TimeTracking entries.')
 		}
 	}
 
