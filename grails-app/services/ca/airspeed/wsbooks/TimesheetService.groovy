@@ -38,7 +38,6 @@ class TimesheetService {
 		def json = tsheetsRestService.findTimesheetsByDateBetween(lastFetchedDate.plusDays(1).toDate(), yesterday.toDate())
 		def dayTotal = 0.00
 		json.results.timesheets.each{ ts ->
-			println ts
 			dayTotal += ts.value.duration.toFloat() / 3600f
 		}
 		log.info(format('TSheets has %s hours between %s and %s.', 
