@@ -46,11 +46,13 @@ class TimesheetService {
 		def qbTimeTrackingList = timeTrackingConverterService.convertFromTsheetsTimesheets(json)
 		qbTimeTrackingList.each {
 			it.save(flush: true, failOnError: true)
-			log.info(format("Added to TimeTracking; id: %s, txnDate: %s, entity: %s, duration: %s, Customer: %s, Service Item: %s",
+			log.debug(format("Added to TimeTracking; id: %s, txnDate: %s, entity: %s, duration: %s, Customer: %s, Service Item: %s.",
 				it.txnID, it.txnDate, it.entityRefListID, it.duration, it.customer?.fullName, it.itemService?.fullName))
 		}
+		log.info(format('%s timesheet hours from TSheets written to QuickBooks.', nf.format(dayTotal)))
 		controlRecord.tsheetsLastFetchedDate = yesterday.toDate()
 		controlRecord.save(failOnError: true, flush: true)
+		log.debug(format('Control.tsheetsLastFetchedDate set to %s.', df.format(controlRecord.tsheetsLastFetchedDate)))
 		return json
 	}
 }
