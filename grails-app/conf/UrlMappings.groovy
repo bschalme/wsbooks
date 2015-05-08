@@ -7,6 +7,9 @@ class UrlMappings {
 			}
 		}
 
+		"/CreditCardCharges"(resources:'CreditCardCharge') {
+			"/TxnExpenseLineDetails"(resources:'TxnExpenseLineDetail')
+		}
 		"/"(view:"/index")
 		"500"(view:'/error')
 	}

@@ -41,6 +41,7 @@ environments {
             url = "jdbc:mysql://anakin/"
 			username = 'test-brian'
 			password = 'test-brian'
+			logSql = false
 			properties {
 				defaultCatalog="brianopensync"
 			}
