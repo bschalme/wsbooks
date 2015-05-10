@@ -4,7 +4,6 @@ grails.project.test.class.dir = "target/test-classes"
 grails.project.test.reports.dir = "target/test-reports"
 grails.project.target.level = 1.6
 grails.project.source.level = 1.6
-//grails.project.war.file = "target/${appName}-${appVersion}.war"
 
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
@@ -19,9 +18,9 @@ grails.project.dependency.resolution = {
     repositories {
         inherits true // Whether to inherit repository definitions from plugins
 
-        grailsPlugins()
         grailsHome()
         grailsCentral()
+		mavenRepo "https://repo.grails.org/grails/plugins"
 
         mavenLocal()
         mavenCentral()
@@ -71,7 +70,7 @@ grails.project.dependency.resolution = {
         compile ':cache:1.1.8'
 		compile ":quartz:1.0.2"
 		compile ":quartz-monitor:1.0"
-		compile ":rest-client-builder:1.0.3"
+		compile ":rest-client-builder:2.1.1"
     }
 	
 }
