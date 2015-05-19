@@ -52,9 +52,11 @@ environments {
             dbCreate = "update"
 			dialect = org.hibernate.dialect.MySQLInnoDBDialect
 			driverClassName = 'com.mysql.jdbc.Driver'
-            url = ""
-			username = ""
-			password = ""
+			String host = System.getenv('DB_WSBOOKS_HOST')
+			String port = System.getenv('DB_WSBOOKS_PORT')
+            url = "jdbc:mysql://$host:$port/wsbooks"
+			username = System.getenv('DB_WSBOOKS_USERNAME')
+			password = System.getenv('DB_WSBOOKS_PASSWORD')
             pooled = true
             properties {
 			   defaultCatalog="wsbooks"
@@ -72,9 +74,11 @@ environments {
             dbCreate = "validate"
 			dialect = org.hibernate.dialect.MySQLInnoDBDialect
 			driverClassName = 'com.mysql.jdbc.Driver'
-            url = ""
-			username = ""
-			password = ""
+			String host = System.getenv('DB_QUICKBOOKS_HOST')
+			String port = System.getenv('DB_QUICKBOOKS_PORT')
+            url = "jdbc:mysql://$host:$port/qbairspeed"
+			username = System.getenv('DB_QUICKBOOKS_USERNAME')
+			password = System.getenv('DB_QUICKBOOKS_PASSWORD')
             pooled = true
             properties {
 			   defaultCatalog="qbairspeed"

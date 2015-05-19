@@ -114,3 +114,9 @@ grails {
     }
 }
 remove this line */
+
+tsheets.rest.url = System.getenv('TSHEETS_REST_URL')
+tsheets.rest.token = System.getenv('TSHEETS_REST_TOKEN')
+
+freshbooks.url = System.getenv('FRESHBOOKS_URL')
+freshbooks.token = System.getenv('FRESHBOOKS_TOKEN')

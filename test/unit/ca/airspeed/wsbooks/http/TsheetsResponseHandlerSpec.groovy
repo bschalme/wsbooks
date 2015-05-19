@@ -5,7 +5,6 @@ import ca.airspeed.wsbooks.exception.TsheetsException;
 import static org.springframework.http.HttpStatus.OK
 import static org.springframework.http.HttpStatus.UNAUTHORIZED
 
-import grails.plugins.rest.client.ErrorResponse
 import grails.plugins.rest.client.RestResponse
 import grails.test.mixin.TestFor;
 import grails.test.mixin.TestMixin;
@@ -31,7 +30,7 @@ class TsheetsResponseHandlerSpec extends Specification {
 		def builder = new JsonBuilder()
 		def root = builder.call([message : "Hello World!"])
 		def responseEntity = new ResponseEntity(builder.toPrettyString(), OK)
-		def myResponse = new RestResponse(responseEntity: responseEntity)
+		def myResponse = new RestResponse(responseEntity)
 
 		when:
 		def results = tsheetsResponseHandler.handle(myResponse)
@@ -44,8 +43,8 @@ class TsheetsResponseHandlerSpec extends Specification {
 		given:
 		def builder = new JsonBuilder()
 		def root = builder.call([error : "invalid_grant", error_description : "The access token provided has expired"])
-		def statusCodeException = new HttpClientErrorException(UNAUTHORIZED, UNAUTHORIZED.reasonPhrase, builder.toPrettyString().bytes, null)
-		def myResponse = new ErrorResponse(error:statusCodeException)
+		def responseEntity = new ResponseEntity(builder.toPrettyString(), UNAUTHORIZED)
+		def myResponse = new RestResponse(responseEntity)
 		
 		when:
 		def results = tsheetsResponseHandler.handle(myResponse)

@@ -1,6 +1,9 @@
 .DS_Store
 *.class
 
+# Environment setup files
+/setenv
+
 # Package Files #
 *.jar
 *.war
