@@ -18,8 +18,8 @@ class FreshbooksService {
 		fbInv.terms = inv.terms
 		fbInv.currencyCode = 'CAD'
 		def fbLines = []
-		def fbLine = new com.freshbooks.model.InvoiceLine()
 		inv.lines.each {
+            def fbLine = new com.freshbooks.model.InvoiceLine()
 			fbLine.name = items[it.name]
 			fbLine.description = it.description
 			fbLine.quantity = it.quantity
