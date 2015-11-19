@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="main"/>
-		<title>Welcome to Grails</title>
+		<title>WS-Books</title>
 		<style type="text/css" media="screen">
 			#status {
 				background-color: #eee;
@@ -103,18 +103,22 @@
 			</ul>
 		</div>
 		<div id="page-body" role="main">
-			<h1>Welcome to Grails</h1>
-			<p>Congratulations, you have successfully started your first Grails application! At the moment
-			   this is the default page, feel free to modify it to either redirect to a controller or display whatever
-			   content you may choose. Below is a list of controllers that are currently deployed in this application,
-			   click on each to execute its default action:</p>
+			<h1>Welcome to WS-Books</h1>
+		<p>WS-Books captures yesterday's timesheets from TSheets and feeds
+			them into QuickBooks. On a monthly basis it generates
+			time-and-materials invoices and posts them to QuickBooks and to
+			Freshbooks for delivery.</p>
+		<p>Use this application to manage the control information, job
+			schedules and the various cross-reference tables.</p>
 
-			<div id="controller-list" role="navigation">
-				<h2>Available Controllers:</h2>
+		    <div id="controller-list" role="navigation">
+				<h2>WS-Books Management</h2>
 				<ul>
-					<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-						<li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
-					</g:each>
+					<li class="controller"><g:link controller="control">Control</g:link></li>
+					<li class="controller"><g:link controller="quartz">Quartz Jobs</g:link></li>
+					<li class="controller"><g:link controller="tsheetsJobcodeXref">TSheets Job Cross-Reference</g:link></li>
+					<li class="controller"><g:link controller="tsheetsUserXref">TSheets User Cross-Reference</g:link></li>
+					<li class="controller"><g:link controller="recurrence">Recurring Items</g:link></li>
 				</ul>
 			</div>
 		</div>
