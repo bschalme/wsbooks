@@ -5,7 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException
 class TsheetsUserXrefController {
 
 	static scaffold = TsheetsUserXref
-
+	static Boolean linkMe = true
     static allowedMethods = [create: ['GET', 'POST'], edit: ['GET', 'POST'], delete: 'POST']
 
     def index() {

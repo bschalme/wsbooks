@@ -38,13 +38,19 @@
 						<span class="icon-bar"></span>
 					</a>
 					
-					<a class="brand" href="${createLink(uri: '/')}">Grails Twitter Bootstrap</a>
+					<a class="brand" href="${createLink(uri: '/')}">WS-Books</a>
 
 					<div class="nav-collapse">
 						<ul class="nav">							
 							<li<%= request.forwardURI == "${createLink(uri: '/')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/')}">Home</a></li>
 							<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-								<li<%= c.logicalPropertyName == controllerName ? ' class="active"' : '' %>><g:link controller="${c.logicalPropertyName}">${c.naturalName}</g:link></li>
+                                <g:if test="${c.getStaticPropertyValue('linkMe', Boolean) || c.fullName == 'grails.plugins.quartz.QuartzController'}">
+								<li<%= c.logicalPropertyName == controllerName ? ' class="active"' : '' %>>
+									<g:link controller="${c.logicalPropertyName}">
+										<g:message code="${c.name}.label" default="${c.naturalName}" />
+									</g:link>
+								</li>
+							</g:if>
 							</g:each>
 						</ul>
 					</div>

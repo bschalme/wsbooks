@@ -5,7 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException
 class ControlController {
 
 	static scaffold = Control
-
+	static Boolean linkMe = true
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index() {

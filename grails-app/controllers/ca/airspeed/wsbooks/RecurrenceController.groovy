@@ -5,7 +5,7 @@ import org.springframework.dao.DataIntegrityViolationException
 class RecurrenceController {
 
 	static scaffold = Recurrence
-
+	static Boolean linkMe = true
     static allowedMethods = [create: ['GET', 'POST'], edit: ['GET', 'POST'], delete: 'POST']
 
     def index() {
