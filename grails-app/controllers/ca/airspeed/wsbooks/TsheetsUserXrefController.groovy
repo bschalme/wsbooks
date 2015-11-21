@@ -1,104 +1,111 @@
 package ca.airspeed.wsbooks
 
+import org.springframework.dao.DataIntegrityViolationException
 
-
-import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
-
-@Transactional(readOnly = true)
 class TsheetsUserXrefController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+	static scaffold = TsheetsUserXref
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond TsheetsUserXref.list(params), model:[tsheetsUserXrefInstanceCount: TsheetsUserXref.count()]
+    static allowedMethods = [create: ['GET', 'POST'], edit: ['GET', 'POST'], delete: 'POST']
+
+    def index() {
+        redirect action: 'list', params: params
     }
 
-    def show(TsheetsUserXref tsheetsUserXrefInstance) {
-        respond tsheetsUserXrefInstance
+    def list() {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        [tsheetsUserXrefInstanceList: TsheetsUserXref.list(params), tsheetsUserXrefInstanceTotal: TsheetsUserXref.count()]
     }
 
     def create() {
-        respond new TsheetsUserXref(params)
+		switch (request.method) {
+		case 'GET':
+        	[tsheetsUserXrefInstance: new TsheetsUserXref(params)]
+			break
+		case 'POST':
+	        def tsheetsUserXrefInstance = new TsheetsUserXref(params)
+	        if (!tsheetsUserXrefInstance.save(flush: true)) {
+	            render view: 'create', model: [tsheetsUserXrefInstance: tsheetsUserXrefInstance]
+	            return
+	        }
+
+			flash.message = message(code: 'default.created.message', args: [message(code: 'tsheetsUserXref.label', default: 'TsheetsUserXref'), tsheetsUserXrefInstance.id])
+	        redirect action: 'show', id: tsheetsUserXrefInstance.id
+			break
+		}
     }
 
-    @Transactional
-    def save(TsheetsUserXref tsheetsUserXrefInstance) {
-        if (tsheetsUserXrefInstance == null) {
-            notFound()
+    def show() {
+        def tsheetsUserXrefInstance = TsheetsUserXref.get(params.id)
+        if (!tsheetsUserXrefInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'tsheetsUserXref.label', default: 'TsheetsUserXref'), params.id])
+            redirect action: 'list'
             return
         }
 
-        if (tsheetsUserXrefInstance.hasErrors()) {
-            respond tsheetsUserXrefInstance.errors, view:'create'
+        [tsheetsUserXrefInstance: tsheetsUserXrefInstance]
+    }
+
+    def edit() {
+		switch (request.method) {
+		case 'GET':
+	        def tsheetsUserXrefInstance = TsheetsUserXref.get(params.id)
+	        if (!tsheetsUserXrefInstance) {
+	            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tsheetsUserXref.label', default: 'TsheetsUserXref'), params.id])
+	            redirect action: 'list'
+	            return
+	        }
+
+	        [tsheetsUserXrefInstance: tsheetsUserXrefInstance]
+			break
+		case 'POST':
+	        def tsheetsUserXrefInstance = TsheetsUserXref.get(params.id)
+	        if (!tsheetsUserXrefInstance) {
+	            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tsheetsUserXref.label', default: 'TsheetsUserXref'), params.id])
+	            redirect action: 'list'
+	            return
+	        }
+
+	        if (params.version) {
+	            def version = params.version.toLong()
+	            if (tsheetsUserXrefInstance.version > version) {
+	                tsheetsUserXrefInstance.errors.rejectValue('version', 'default.optimistic.locking.failure',
+	                          [message(code: 'tsheetsUserXref.label', default: 'TsheetsUserXref')] as Object[],
+	                          "Another user has updated this TsheetsUserXref while you were editing")
+	                render view: 'edit', model: [tsheetsUserXrefInstance: tsheetsUserXrefInstance]
+	                return
+	            }
+	        }
+
+	        tsheetsUserXrefInstance.properties = params
+
+	        if (!tsheetsUserXrefInstance.save(flush: true)) {
+	            render view: 'edit', model: [tsheetsUserXrefInstance: tsheetsUserXrefInstance]
+	            return
+	        }
+
+			flash.message = message(code: 'default.updated.message', args: [message(code: 'tsheetsUserXref.label', default: 'TsheetsUserXref'), tsheetsUserXrefInstance.id])
+	        redirect action: 'show', id: tsheetsUserXrefInstance.id
+			break
+		}
+    }
+
+    def delete() {
+        def tsheetsUserXrefInstance = TsheetsUserXref.get(params.id)
+        if (!tsheetsUserXrefInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'tsheetsUserXref.label', default: 'TsheetsUserXref'), params.id])
+            redirect action: 'list'
             return
         }
 
-        tsheetsUserXrefInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'tsheetsUserXref.label', default: 'TsheetsUserXref'), tsheetsUserXrefInstance.id])
-                redirect tsheetsUserXrefInstance
-            }
-            '*' { respond tsheetsUserXrefInstance, [status: CREATED] }
+        try {
+            tsheetsUserXrefInstance.delete(flush: true)
+			flash.message = message(code: 'default.deleted.message', args: [message(code: 'tsheetsUserXref.label', default: 'TsheetsUserXref'), params.id])
+            redirect action: 'list'
         }
-    }
-
-    def edit(TsheetsUserXref tsheetsUserXrefInstance) {
-        respond tsheetsUserXrefInstance
-    }
-
-    @Transactional
-    def update(TsheetsUserXref tsheetsUserXrefInstance) {
-        if (tsheetsUserXrefInstance == null) {
-            notFound()
-            return
-        }
-
-        if (tsheetsUserXrefInstance.hasErrors()) {
-            respond tsheetsUserXrefInstance.errors, view:'edit'
-            return
-        }
-
-        tsheetsUserXrefInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'TsheetsUserXref.label', default: 'TsheetsUserXref'), tsheetsUserXrefInstance.id])
-                redirect tsheetsUserXrefInstance
-            }
-            '*'{ respond tsheetsUserXrefInstance, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(TsheetsUserXref tsheetsUserXrefInstance) {
-
-        if (tsheetsUserXrefInstance == null) {
-            notFound()
-            return
-        }
-
-        tsheetsUserXrefInstance.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'TsheetsUserXref.label', default: 'TsheetsUserXref'), tsheetsUserXrefInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'tsheetsUserXref.label', default: 'TsheetsUserXref'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
+        catch (DataIntegrityViolationException e) {
+			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'tsheetsUserXref.label', default: 'TsheetsUserXref'), params.id])
+            redirect action: 'show', id: params.id
         }
     }
 }

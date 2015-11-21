@@ -1,104 +1,111 @@
 package ca.airspeed.wsbooks
 
+import org.springframework.dao.DataIntegrityViolationException
 
-
-import static org.springframework.http.HttpStatus.*
-import grails.transaction.Transactional
-
-@Transactional(readOnly = true)
 class TsheetsJobcodeXrefController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+	static scaffold = TsheetsJobcodeXref
 
-    def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond TsheetsJobcodeXref.list(params), model:[tsheetsJobcodeXrefInstanceCount: TsheetsJobcodeXref.count()]
+    static allowedMethods = [create: ['GET', 'POST'], edit: ['GET', 'POST'], delete: 'POST']
+
+    def index() {
+        redirect action: 'list', params: params
     }
 
-    def show(TsheetsJobcodeXref tsheetsJobcodeXrefInstance) {
-        respond tsheetsJobcodeXrefInstance
+    def list() {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        [tsheetsJobcodeXrefInstanceList: TsheetsJobcodeXref.list(params), tsheetsJobcodeXrefInstanceTotal: TsheetsJobcodeXref.count()]
     }
 
     def create() {
-        respond new TsheetsJobcodeXref(params)
+		switch (request.method) {
+		case 'GET':
+        	[tsheetsJobcodeXrefInstance: new TsheetsJobcodeXref(params)]
+			break
+		case 'POST':
+	        def tsheetsJobcodeXrefInstance = new TsheetsJobcodeXref(params)
+	        if (!tsheetsJobcodeXrefInstance.save(flush: true)) {
+	            render view: 'create', model: [tsheetsJobcodeXrefInstance: tsheetsJobcodeXrefInstance]
+	            return
+	        }
+
+			flash.message = message(code: 'default.created.message', args: [message(code: 'tsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), tsheetsJobcodeXrefInstance.id])
+	        redirect action: 'show', id: tsheetsJobcodeXrefInstance.id
+			break
+		}
     }
 
-    @Transactional
-    def save(TsheetsJobcodeXref tsheetsJobcodeXrefInstance) {
-        if (tsheetsJobcodeXrefInstance == null) {
-            notFound()
+    def show() {
+        def tsheetsJobcodeXrefInstance = TsheetsJobcodeXref.get(params.id)
+        if (!tsheetsJobcodeXrefInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'tsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), params.id])
+            redirect action: 'list'
             return
         }
 
-        if (tsheetsJobcodeXrefInstance.hasErrors()) {
-            respond tsheetsJobcodeXrefInstance.errors, view:'create'
+        [tsheetsJobcodeXrefInstance: tsheetsJobcodeXrefInstance]
+    }
+
+    def edit() {
+		switch (request.method) {
+		case 'GET':
+	        def tsheetsJobcodeXrefInstance = TsheetsJobcodeXref.get(params.id)
+	        if (!tsheetsJobcodeXrefInstance) {
+	            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), params.id])
+	            redirect action: 'list'
+	            return
+	        }
+
+	        [tsheetsJobcodeXrefInstance: tsheetsJobcodeXrefInstance]
+			break
+		case 'POST':
+	        def tsheetsJobcodeXrefInstance = TsheetsJobcodeXref.get(params.id)
+	        if (!tsheetsJobcodeXrefInstance) {
+	            flash.message = message(code: 'default.not.found.message', args: [message(code: 'tsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), params.id])
+	            redirect action: 'list'
+	            return
+	        }
+
+	        if (params.version) {
+	            def version = params.version.toLong()
+	            if (tsheetsJobcodeXrefInstance.version > version) {
+	                tsheetsJobcodeXrefInstance.errors.rejectValue('version', 'default.optimistic.locking.failure',
+	                          [message(code: 'tsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref')] as Object[],
+	                          "Another user has updated this TsheetsJobcodeXref while you were editing")
+	                render view: 'edit', model: [tsheetsJobcodeXrefInstance: tsheetsJobcodeXrefInstance]
+	                return
+	            }
+	        }
+
+	        tsheetsJobcodeXrefInstance.properties = params
+
+	        if (!tsheetsJobcodeXrefInstance.save(flush: true)) {
+	            render view: 'edit', model: [tsheetsJobcodeXrefInstance: tsheetsJobcodeXrefInstance]
+	            return
+	        }
+
+			flash.message = message(code: 'default.updated.message', args: [message(code: 'tsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), tsheetsJobcodeXrefInstance.id])
+	        redirect action: 'show', id: tsheetsJobcodeXrefInstance.id
+			break
+		}
+    }
+
+    def delete() {
+        def tsheetsJobcodeXrefInstance = TsheetsJobcodeXref.get(params.id)
+        if (!tsheetsJobcodeXrefInstance) {
+			flash.message = message(code: 'default.not.found.message', args: [message(code: 'tsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), params.id])
+            redirect action: 'list'
             return
         }
 
-        tsheetsJobcodeXrefInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'tsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), tsheetsJobcodeXrefInstance.id])
-                redirect tsheetsJobcodeXrefInstance
-            }
-            '*' { respond tsheetsJobcodeXrefInstance, [status: CREATED] }
+        try {
+            tsheetsJobcodeXrefInstance.delete(flush: true)
+			flash.message = message(code: 'default.deleted.message', args: [message(code: 'tsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), params.id])
+            redirect action: 'list'
         }
-    }
-
-    def edit(TsheetsJobcodeXref tsheetsJobcodeXrefInstance) {
-        respond tsheetsJobcodeXrefInstance
-    }
-
-    @Transactional
-    def update(TsheetsJobcodeXref tsheetsJobcodeXrefInstance) {
-        if (tsheetsJobcodeXrefInstance == null) {
-            notFound()
-            return
-        }
-
-        if (tsheetsJobcodeXrefInstance.hasErrors()) {
-            respond tsheetsJobcodeXrefInstance.errors, view:'edit'
-            return
-        }
-
-        tsheetsJobcodeXrefInstance.save flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'TsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), tsheetsJobcodeXrefInstance.id])
-                redirect tsheetsJobcodeXrefInstance
-            }
-            '*'{ respond tsheetsJobcodeXrefInstance, [status: OK] }
-        }
-    }
-
-    @Transactional
-    def delete(TsheetsJobcodeXref tsheetsJobcodeXrefInstance) {
-
-        if (tsheetsJobcodeXrefInstance == null) {
-            notFound()
-            return
-        }
-
-        tsheetsJobcodeXrefInstance.delete flush:true
-
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'TsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), tsheetsJobcodeXrefInstance.id])
-                redirect action:"index", method:"GET"
-            }
-            '*'{ render status: NO_CONTENT }
-        }
-    }
-
-    protected void notFound() {
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.not.found.message', args: [message(code: 'tsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), params.id])
-                redirect action: "index", method: "GET"
-            }
-            '*'{ render status: NOT_FOUND }
+        catch (DataIntegrityViolationException e) {
+			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'tsheetsJobcodeXref.label', default: 'TsheetsJobcodeXref'), params.id])
+            redirect action: 'show', id: params.id
         }
     }
 }

@@ -12,12 +12,13 @@ grails.project.dependency.resolution = {
         // excludes 'ehcache'
 		// excludes 'grails-plugin-log4j', 'log4j', 'commons-logging'
     }
-    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
 
     repositories {
         inherits true // Whether to inherit repository definitions from plugins
 
+		grailsPlugins()
         grailsHome()
         grailsCentral()
 		mavenRepo "https://repo.grails.org/grails/plugins"
@@ -65,12 +66,15 @@ grails.project.dependency.resolution = {
 		build ":release:3.1.1"
 
         runtime ":database-migration:1.3.8"
+		runtime ":twitter-bootstrap:2.3.2.3"
+		runtime ":fields:1.5.1"
 
 		compile ':scaffolding:2.0.3'
         compile ':cache:1.1.8'
 		compile ":quartz:1.0.2"
 		compile ":quartz-monitor:1.0"
 		compile ":rest-client-builder:2.1.1"
+		compile ":lesscss-resources:1.3.3"
     }
 	
 }

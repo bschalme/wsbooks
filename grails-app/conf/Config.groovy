@@ -79,6 +79,9 @@ grails.exceptionresolver.params.exclude = ['password']
 // configure auto-caching of queries by default (if false you can cache individual queries with 'cache: true')
 grails.hibernate.cache.queries = false
 
+grails.plugins.twitterbootstrap.fixtaglib = true
+grails.plugins.twitterbootstrap.defaultBundle = 'bundle_bootstrap'
+
 environments {
     development {
         grails.logging.jul.usebridge = true
@@ -114,6 +117,9 @@ grails {
     }
 }
 remove this line */
+
+quartz.monitor.layout='bootstrap'
+quartz.monitor.showCountdown=false
 
 tsheets.rest.url = System.getenv('TSHEETS_REST_URL')
 tsheets.rest.token = System.getenv('TSHEETS_REST_TOKEN')

@@ -7,6 +7,7 @@ class TsheetsJobcodeXref {
 	String qbItemServiceListId
 
     static constraints = {
+        jobName(nullable: false, blank: false)
     }
 	
 	String toString() {
