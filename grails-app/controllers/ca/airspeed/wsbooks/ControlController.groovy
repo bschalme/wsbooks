@@ -6,7 +6,8 @@ class ControlController {
 
 	static scaffold = Control
 	static Boolean linkMe = true
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+	
+    static allowedMethods = [create: ['GET', 'POST'], edit: ['GET', 'POST'], delete: 'POST']
 
     def index() {
         redirect action: 'list', params: params

@@ -147,11 +147,11 @@ quartzJobs {
 }
 ```
 
-Make sure `EndOfScheduleJob` is the last Job to run. It sends an email to you summarizing what it did.
+Set the cron expression of `EndOfScheduleJob` so it is the last Job to run. It sends an email to you summarizing what it did.
 
 ## Building
 
-WS-Books uses Grails 2.3.7 and Java 1.7. Ensure you have the environment variable `JAVA_HOME` pointing to a JDK 1,7 installations.
+WS-Books uses Grails 2.3.7 and Java 1.7. Ensure you have the environment variable `JAVA_HOME` pointing to a JDK 1.7 installations.
 
 The usual Grails commands apply:
 
@@ -174,4 +174,4 @@ If you want to be able to browse to a simple URL like [http://localhost:8080/wsb
 
 Replace `D:/webapps/` with the directory path you chose.
 
-Now deply it using Tomcat's deplyment manager.
+Now deploy it using Tomcat's deployment manager.
