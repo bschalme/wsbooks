@@ -195,7 +195,7 @@ class InvoiceServiceTests {
 		t4.entityRefListID = '20000-929923144'
 		t4.customer = Customer.get('CD0000-1190818043')
 		t4.itemService = ItemService.get('A0000-1011121334')
-		t4.durationInMinutes = 30
+		t4.durationInMinutes = 45
 		t4.billableStatus = 'Billable'
 		t4.status = 'ADD'
 		t4.save(failOnError: true)
@@ -229,7 +229,7 @@ class InvoiceServiceTests {
 		assert lineCreated.taxes?.get(0)?.name == 'GST'
 		assert lineCreated.taxes?.get(0)?.percent == 5.00
 		lineCreated = invCreated.lines[1]
-		assert lineCreated.quantity == 1.5
+		assert lineCreated.quantity == 1.75
 
 		Invoice inv = Invoice.findByCustomer(Customer.get('CD0000-1190818043'))
 		assert inv != null
@@ -259,7 +259,7 @@ class InvoiceServiceTests {
 			it.item.listID == 'A0000-1011121334'
 		}
 		assert StringUtils.isNotBlank(line.txnLineID)
-		assert line.quantity == '1.5'
+		assert line.quantity == '1.75'
 		
 		t1 = TimeTracking.get('TIME-1')
 		assert t1.billableStatus == 'HasBeenBilled'
