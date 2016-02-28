@@ -22,7 +22,7 @@ grails.config.locations = [ "classpath:${appName}-config.groovy",
                             "file:${userHome}/.grails/${appName}-config.properties",
                             "file:${userHome}/.grails/${appName}-config.groovy",
                             "file:/apps/conf/${appName}-config.properties",
-	                        "file:D:/apps/conf/${appName}-config.groovy",
+	                        "file:/apps/conf/${appName}-config.groovy",
                             "file:/apps/conf/${appName}-quartz-config.groovy",
                             "file:${userHome}/.grails/${appName}-quartz-config.groovy"]
 
@@ -120,6 +120,8 @@ remove this line */
 
 quartz.monitor.layout='bootstrap'
 quartz.monitor.showCountdown=false
+
+jetty.host='0.0.0.0'
 
 tsheets.rest.url = System.getenv('TSHEETS_REST_URL')
 tsheets.rest.token = System.getenv('TSHEETS_REST_TOKEN')
