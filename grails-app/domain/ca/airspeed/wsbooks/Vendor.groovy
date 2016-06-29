@@ -67,7 +67,7 @@ class Vendor {
 
 	static mapping = {
 		datasource 'opensync'
-		table 'Vendor'
+		table 'vendor'
 		version false
 		id column: 'ListID', generator: 'assigned'
 		listID column: 'ListID'
@@ -169,10 +169,10 @@ class Vendor {
 	String vendorTypeRefFullName
 	Terms terms
 	String termsRefFullName
-	Float creditLimit
+	BigDecimal creditLimit
 	String vendorTaxIdent
 	String isVendorEligibleFor1099
-	Float balance
+	BigDecimal balance
 	String isSalesTaxAgency
 	String currencyRefListID
 	String currencyRefFullName

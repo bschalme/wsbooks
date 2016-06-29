@@ -14,7 +14,7 @@ class CustomerMsg {
 
 	static mapping = {
 		datasource 'opensync'
-		table 'CustomerMsg'
+		table 'customermsg'
 		version false
 		id column: 'ListID', generator: 'assigned'
 		listID column: 'ListID'

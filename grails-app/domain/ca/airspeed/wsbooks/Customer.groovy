@@ -86,7 +86,7 @@ class Customer {
 		currencyRefListID(nullable: true)
 		currencyRefFullName(nullable: true)
 		isStatementWithParent(nullable: true)
-		deliveryMethod(nullable: true)
+		preferredDeliveryMethod(nullable: true)
 		customField1(nullable: true)
 		customField2(nullable: true)
 		customField3(nullable: true)
@@ -188,7 +188,7 @@ class Customer {
 		currencyRefListID column: 'CurrencyRef_ListID'
 		currencyRefFullName column: 'CurrencyRef_FullName'
 		isStatementWithParent column: 'IsStatementWithParent'
-		deliveryMethod column: 'DeliveryMethod'
+		preferredDeliveryMethod column: 'PreferredDeliveryMethod'
 		customField1 column: 'CustomField1'
 		customField2 column: 'CustomField2'
 		customField3 column: 'CustomField3'
@@ -256,8 +256,8 @@ class Customer {
 	String termsRefFullName
 	String salesRepRefListID
 	String salesRepRefFullName
-	Float balance
-	Float totalBalance
+	BigDecimal balance
+	BigDecimal totalBalance
 	String salesTaxCodeRefListID
 	String salesTaxCodeRefFullName
 	String itemSalesTaxRefListID
@@ -265,7 +265,7 @@ class Customer {
 	String salesTaxCountry
 	String resaleNumber
 	String accountNumber
-	Float creditLimit
+	BigDecimal creditLimit
 	String preferredPaymentMethodRefListID
 	String preferredPaymentMethodRefFullName
 	String creditCardNumber
@@ -288,7 +288,7 @@ class Customer {
 	String currencyRefListID
 	String currencyRefFullName
 	String isStatementWithParent
-	String deliveryMethod
+	String preferredDeliveryMethod
 	String customField1
 	String customField2
 	String customField3

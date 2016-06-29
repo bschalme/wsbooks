@@ -19,7 +19,7 @@ class Items {
 
 	static mapping = {
 		datasource 'opensync'
-		table 'Items'
+		table 'items'
 		version false
 		id column: 'ListID', generator: 'assigned'
 		listID column: 'ListID'

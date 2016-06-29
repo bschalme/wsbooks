@@ -42,7 +42,7 @@ class CreditCardCharge {
 
 	static mapping = {
 		datasource 'opensync'
-		table 'CreditCardCharge'
+		table 'creditcardcharge'
 		version false
 		id column: 'TxnID', generator: 'assigned'
 		txnID column: 'TxnID'
@@ -91,11 +91,11 @@ class CreditCardCharge {
 	Vendor payeeEntity
 	String payeeEntityRefFullName
 	Date txnDate
-	Float amount
+	BigDecimal amount
 	String currencyRefListID
 	String currencyRefFullName
 	Float exchangeRate
-	Float amountInHomeCurrency
+	BigDecimal amountInHomeCurrency
 	String refNumber
 	String memo
 	String isTaxIncluded

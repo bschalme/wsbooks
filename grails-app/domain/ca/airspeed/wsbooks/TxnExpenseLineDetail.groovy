@@ -35,7 +35,7 @@ class TxnExpenseLineDetail {
 
 	static mapping = {
 		datasource 'opensync'
-		table 'TxnExpenseLineDetail'
+		table 'txnexpenselinedetail'
 		version false
 		id column: 'TxnLineID', generator: 'assigned'
 		txnLineID column: 'TxnLineID'
@@ -70,7 +70,7 @@ class TxnExpenseLineDetail {
 	String txnLineID
 	Account account
 	String accountRefFullName
-	Float amount
+	BigDecimal amount
 	String memo
 	Customer customer
 	String customerRefFullName

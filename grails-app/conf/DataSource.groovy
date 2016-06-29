@@ -43,7 +43,7 @@ environments {
 			password = 'test-brian'
 			logSql = false
 			properties {
-				defaultCatalog="brianopensync"
+				defaultCatalog="brianopensync2"
 			}
         }
     }

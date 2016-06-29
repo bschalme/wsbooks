@@ -22,7 +22,7 @@ class Template {
 
 	static mapping = {
 		datasource 'opensync'
-		table 'Template'
+		table 'template'
 		version false
 		id column: 'ListID', generator: 'assigned'
 		listID column: 'ListID'

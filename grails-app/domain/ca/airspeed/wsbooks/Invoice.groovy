@@ -246,17 +246,17 @@ class Invoice {
 	Date shipDate
 	String shipMethodRefListID
 	String shipMethodRefFullName
-	Float subtotal
+	BigDecimal subtotal
 	String itemSalesTaxRefListID
 	String itemSalesTaxRefFullName
 	String salesTaxPercentage
-	Float salesTaxTotal
-	Float appliedAmount
-	Float balanceRemaining
+	BigDecimal salesTaxTotal
+	BigDecimal appliedAmount
+	BigDecimal balanceRemaining
 	String currencyRefListID
 	String currencyRefFullName
 	Float exchangeRate
-	Float balanceRemainingInHomeCurrency
+	BigDecimal balanceRemainingInHomeCurrency
 	String memo
 	String isPaid
 	CustomerMsg customerMsg
@@ -266,7 +266,7 @@ class Invoice {
 	String isTaxIncluded
 	String customerSalesTaxCodeRefListID
 	String customerSalesTaxCodeRefFullName
-	Float suggestedDiscountAmount
+	BigDecimal suggestedDiscountAmount
 	Date suggestedDiscountDate
 	String other
 	String customField1

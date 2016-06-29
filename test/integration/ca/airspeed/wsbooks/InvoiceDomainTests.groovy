@@ -26,8 +26,8 @@ class InvoiceDomainTests {
 		
 		inv.save(flush: true, failOnError: true)
 		
-		assert Invoice.list().size() == 1
-		inv = Invoice.list().get(0)
+		assert Invoice.list().size() > 0
+		inv = Invoice.findById('ABC-123')
 		assert inv.arAccount.name == 'Accounts Receivable'
 		assert inv.terms.name == 'Net 30'
 		assert inv.refNumber == '99999'

@@ -63,7 +63,7 @@ class Account {
 
 	static mapping = {
 		datasource 'opensync'
-		table 'Account'
+		table 'account'
 		version false
 		id column: 'ListID', generator: 'assigned'
 		listID column: 'ListID'
@@ -125,8 +125,8 @@ class Account {
 	String bankNumber
 	String lastCheckNumber
 	String description
-	Float balance
-	Float totalBalance
+	BigDecimal balance
+	BigDecimal totalBalance
 	String cashFlowClassification
 	String specialAccountType
 	String salesTaxCodeRefListID

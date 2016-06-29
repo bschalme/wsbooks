@@ -102,7 +102,7 @@ class InvoiceLineDetail {
 	String ratePercent
 	String classRefListID
 	String classRefFullName
-	Float amount
+	BigDecimal amount
 	String inventorySiteRefListID
 	String inventorySiteRefFullName
 	Date serviceDate
