@@ -34,6 +34,13 @@ class TimesheetServiceTests {
 		jobXref.qbCustomerListId = '7F0000-1069293389'
 		jobXref.qbItemServiceListId = '140000-1069940598'
 		jobXref.save(flush: true, failOnError: true)
+
+		jobXref = new TsheetsJobcodeXref()
+		jobXref.jobName = 'Test Customer and Job 3'
+		jobXref.tsheetsJobcodeId = 37016221
+		jobXref.qbCustomerListId = '7F0000-1069293389'
+		jobXref.qbItemServiceListId = '140000-1069940598'
+		jobXref.save(flush: true, failOnError: true)
 	}
 
 	@Test
