@@ -1,6 +1,6 @@
 # WS-Books
 
-Updates QuickBooks with yesterday's TSheets timesheets. In additionn, each month it generates an invoice for the previous month, and sends it to FreshBooks for delivery to your clients. 
+Updates QuickBooks with yesterday's TSheets timesheets. In addition, each month it generates an invoice for the previous month, and sends it to FreshBooks for delivery to your clients. 
 
 ## What Problem Does It Solve?
 
@@ -44,7 +44,7 @@ FRESHBOOKS_URL=<Your FreshBooks URL>
 FRESHBOOKS_TOKEN=<Your FreshBooks Access Token>
 ```
 
-WS-Books uses two databases. One for the cross-reference tables, and runtime control data:
+WS-Books uses two databases. One for the cross-reference tables and runtime control data:
 ```
 DB_WSBOOKS_HOST=<Database host name or IP address>
 DB_WSBOOKS_PORT=3306
@@ -62,7 +62,8 @@ DB_QUICKBOOKS_PASSWORD=<Its password>
 
 ### Configuration Files
 
-Create the file `wsbooks-config.groovy`. For development put it in the `.grails` folder of your home directory; for Production put it on Tomcat's classpath:
+Create the file `wsbooks-config.groovy`. For development put it in the `.grails` folder of your home directory; for Production put it on Tomcat's classpath if you plan on
+depkoyinf WS-Books to an existing Tomcat container. If you are going to run it stand-alone, put it one of the folders specified for `grails.config.locations` in `Config.groovy`:
 
 ```Groovy
 // PROD
@@ -138,7 +139,7 @@ quartzJobs {
 				cronExpression: '0 25 6 1 * ?'
 			]
 		],
-		'EndOfScheduleJob': [ // Just something that triggers the email to go out.
+		'EndOfScheduleJob': [ // Just something that triggers an email to the administrator with all the log messages.
 			cronTriggers: [
 				cronExpression: '0 30 6 * * ?'
 			]
@@ -162,6 +163,52 @@ grails war
 ```
 
 ## Deploying
+
+### Deploying to Archiva
+
+1. Set `app.version` in `application.properties` to the version number you want (-SNAPSHOT, -RCx, -Mx, etc).
+2. Tag this project in Git.
+
+Then use the maven-deploy command to send the WAR file to Archiva:
+
+```
+grails prod maven-deploy --repository=snapshots
+```
+
+Set `--repository` to `internal` or omit this argument altogether for non-SNAPSHOT deploys.
+
+### Deploying to a server
+
+WS-Books is an executable WAR file that comes with an embedded Jetty servlet container. This means you can install it into an existing Tomcat server, or run it standalone.
+
+#### Standalone
+
+1. Put the `wsbooks-config.groovy` and `wsbooks-quartz-config.groovy` file into `C:\apps\conf`. This folder is one of the folders defined by `grails.config.locations` in `Cofig.groovy`;
+2. Make a `setenv.bat` file in `C:\apps\bin` that contains all the Environment Variables defined above. For Windows platforms, put `exit /b 0` as the last lin ein this file.
+Your secrets are in this file, so set its permissions accordingly;
+3. Make a `wsbooks.bat` file in `C:\apps\bin`:
+
+wsbooks.bat
+
+```
+@ECHO OFF
+set JAVA_HOME=C:\progra~1\Java\jdk1.7.0_80
+
+rem Get standard environment variables
+if exist "setenv.bat" call "setenv.bat"
+:setenvDone
+
+%JAVA_HOME%\bin\java -Djetty.host=0.0.0.0 -jar wsbooks-0.16.0-SNAPSHOT.war
+```
+
+Set the name of the .war file according to the version of WS-Books you have.
+
+4. Download wsbooks-x.x.x.war from Archiva into ``C:\apps\bin`;
+5. Make a `C:\apps\logs` folder;
+5. Run a Command Line window as Administrator, cd into `C:\apps\bin` and execute `wsbooks.bat`; and
+6. Browse to port 8080 of the host you are running WS-Books on.
+
+#### Tomcat
 
 Deploy the WAR file you created with `grails war` into Tomcat. Browse to http://localhost:8080/wsbooks-<version>, where `<version>` is the version number suffix on the WAR file name.
 
