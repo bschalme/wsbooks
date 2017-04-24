@@ -1,0 +1,62 @@
+version: '2'
+
+services:
+  wsbooks:
+    image: bschalme/ws-books:latest
+    container_name: wsbooks
+    hostname: wsbooks
+    links:
+      - wsbooks_db
+      - quickbooks_db
+    volumes:
+      - ./config/wsbooks:/apps/conf
+      - ./config/logs:/apps/logs
+    env_file:
+      - ./config/wsbooks.env
+    environment:
+      - VIRTUAL_HOST=wsbooks.domain.com
+      - TZ=America/Winnipeg
+
+  wsbooks_db:
+    image: mysql:5.7
+    container_name: wsbooks_db
+    ports:
+      - 3307:3306
+    volumes:
+      - ./config/wsbooks_db:/docker-entrypoint-initdb.d
+      - wsbooksdata:/var/lib/mysql
+    env_file:
+      - ./config/wsbooks_db/wsbooks_db.env
+    environment:
+      - TZ=America/Winnipeg
+
+  quickbooks_db:
+    image: mysql:5.7
+    container_name: quickbooks_db
+    ports:
+      - 3306:3306
+    volumes:
+      - ./config/quickbooks_db:/docker-entrypoint-initdb.d
+      - quickbooksdata:/var/lib/mysql
+    env_file:
+      - ./config/quickbooks_db/quickbooks_db.env
+    environment:
+      - TZ=America/Winnipeg
+
+  proxy:
+    image: bschalme/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    environment:
+      - TZ=America/Winnipeg
+
+volumes:
+  wsbooksdata:
+    driver: local
+  quickbooksdata:
+    driver: local
+

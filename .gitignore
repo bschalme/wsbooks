@@ -4,6 +4,8 @@
 
 # Environment setup files
 /setenv
+**/*.env
+/example/config/**/*.sql
 
 # Package Files #
 *.jar

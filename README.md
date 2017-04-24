@@ -60,6 +60,13 @@ DB_QUICKBOOKS_USERNAME=<The username you designated for updating the OpenSync da
 DB_QUICKBOOKS_PASSWORD=<Its password>
 ```
 
+Finally, for sending out email notiifcations of job success or failure to the sysadmin:
+```
+APP_LOGGING_SMTP_HOST=<Your SMTP host or IP>
+APP_LOGGING_SMTP_USERNAME=<A username>
+APP_LOGGING_SMTP_PASSWORD=<A password>
+```
+
 ### Configuration Files
 
 Create the file `wsbooks-config.groovy`. For development put it in the `.grails` folder of your home directory; for Production put it on Tomcat's classpath if you plan on
@@ -84,9 +91,9 @@ log4j = {
 		)
 		appender new SMTPAppender(
 			name: 'email',
-			SMTPHost: 'yourmailhost',
-			SMTPUsername: 'smptuser',
-			SMTPPassword: 'secret',
+			SMTPHost: System.getenv('APP_LOGGING_SMTP_HOST'),
+			SMTPUsername: System.getenv('APP_LOGGING_SMTP_USERNAME'),
+			SMTPPassword: System.getenv('APP_LOGGING_SMTP_PASSWORD'),
 			from: 'info@domain.com',
 			to: 'you@domain.com', // Your email address
 			subject: 'WS-Books Notification', // Change this if you like
@@ -159,7 +166,7 @@ The usual Grails commands apply:
 ```
 grails test-app
 grails run-app
-grails war
+grails prod war
 ```
 
 ## Deploying
@@ -222,3 +229,44 @@ If you want to be able to browse to a simple URL like [http://localhost:8080/wsb
 Replace `D:/webapps/` with the directory path you chose.
 
 Now deploy it using Tomcat's deployment manager.
+
+#### Docker
+
+There is a Docker file at the project root. Build it, tag it, and push it to a Docker registry:
+
+```
+docker build -t username/ws-books:latest .
+docker push username/ws-books:latest
+```
+
+The preceding example tags and pushes the image to Docker Hub under `username`. If you are using a private registry, replace `username` with the FQDN of your Docker registry.
+
+It's easier to start WS-Books using Docker Compose. Begin in the `./example/` directory:
+
+1. Edit `docker-compose.yml` and change the `VIRTUAL_HOST` and `TZ` environment variables to suit your domain.
+    1. Have a DNS entry or /etc/hosts entry that  maps the value of `VIRTUAL_HOST` to the host Docker is running on.
+
+2. Make a `config/wsbooks.env` file that contains the 15 Environment Variables listed above;
+
+3. In `config/wsbooks/`, edit the two Configuration Files listed above:
+    1. `wsbooks-config.groovy` - edit the SMTP appender here so the from: and to: are what you want.
+    2. `wsbooks-quartz-config.groovy` - change the cron expressions if you like.  
+4. In `config/quickbooks_db`, create a `quickbooks_db.env` file having the four variables that the Docker MySQL image requires:
+
+        MYSQL_ROOT_PASSWORD=<The MySQL root password>
+        MYSQL_DATABASE=qbairspeed
+        MYSQL_USER=<The database user who will access qbairspeed>
+        MYSQL_PASSWORD=<Their password>
+
+5. Do the same in `config/wsbooks_db`, making a `wsbooks_db.env` file for the control database:
+
+        MYSQL_ROOT_PASSWORD=<The MySQL root password>
+        MYSQL_DATABASE=wsbooks
+        MYSQL_USER=<The database user who will access wsbooks>
+        MYSQL_PASSWORD=<Their password>
+
+6. If you have any MySQL backup files you want to use to seed the databases, put the .sql files in `./config/quickbooks_db/` and `./config/wsbooks_db/`. 
+
+7. `docker-compose up -d`
+
+8. Browse to the host name specified by `VIRTUAL_HOST` in `docker-compose.yml`.
