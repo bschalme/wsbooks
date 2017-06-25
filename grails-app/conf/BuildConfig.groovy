@@ -11,6 +11,7 @@ grails.project.dependency.resolution = {
         // specify dependency exclusions here; for example, uncomment this to disable ehcache:
         // excludes 'ehcache'
 		// excludes 'grails-plugin-log4j', 'log4j', 'commons-logging'
+		excludes "xercesImpl"
     }
     log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
@@ -75,6 +76,7 @@ grails.project.dependency.resolution = {
 		compile ":quartz:1.0.2"
 		compile ":quartz-monitor:1.0"
 		compile ":rest-client-builder:2.1.1"
+		compile ":spring-security-rest:1.5.4"
 		compile ":lesscss-resources:1.3.3"
     }
 	

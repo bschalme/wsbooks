@@ -128,3 +128,25 @@ tsheets.rest.token = System.getenv('TSHEETS_REST_TOKEN')
 
 freshbooks.url = System.getenv('FRESHBOOKS_URL')
 freshbooks.token = System.getenv('FRESHBOOKS_TOKEN')
+
+// Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'ca.airspeed.wsbooks.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'ca.airspeed.wsbooks.UserRole'
+grails.plugin.springsecurity.authority.className = 'ca.airspeed.wsbooks.Role'
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+	'/':                ['permitAll'],
+	'/index':           ['permitAll'],
+	'/index.gsp':       ['permitAll'],
+	'/assets/**':       ['permitAll'],
+	'/**/js/**':        ['permitAll'],
+	'/**/css/**':       ['permitAll'],
+	'/**/images/**':    ['permitAll'],
+	'/**/favicon.ico':  ['permitAll']
+]
+
+grails.plugin.springsecurity.filterChain.chainMap = [
+	//Stateless chain
+	'/api/**': 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter',
+	//Traditional chain
+    '/**': 'JOINED_FILTERS,-restTokenValidationFilter,-restExceptionTranslationFilter'
+]

@@ -3,20 +3,24 @@ import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 
 import ca.airspeed.wsbooks.Control;
+import ca.airspeed.wsbooks.Role;
+import ca.airspeed.wsbooks.User;
+import ca.airspeed.wsbooks.UserRole;
 
 class BootStrap {
 	
 	def grailsApplication
 
     def init = { servletContext ->
-		seedDatabase()
+		seedControlData()
+		seedSecurity()
 		initializeJobs()
     }
 
 	def destroy = {
     }
 
-	private void seedDatabase() {
+	private void seedControlData() {
 		def controlData = Control.findAll()
 		if (!controlData) {
 			Control seedControl = new Control()
@@ -26,6 +30,23 @@ class BootStrap {
 		}
 	}
 
+	private void seedSecurity() {
+		def adminRole = new Role('ROLE_ADMIN').save()
+		def userRole = new Role('ROLE_USER').save()
+  
+		def testUser = new User('admin', 'admin')
+		testUser.passwordExpired = false
+		testUser.save()
+  
+		UserRole.create testUser, adminRole, true
+		UserRole.create testUser, userRole, true
+  
+		assert User.count() == 1
+		assert Role.count() == 2
+		assert UserRole.count() == 2
+  
+	}
+	
 	private void initializeJobs() {
 		def jobs = grailsApplication.config.quartzJobs.jobs
     	if (jobs) {

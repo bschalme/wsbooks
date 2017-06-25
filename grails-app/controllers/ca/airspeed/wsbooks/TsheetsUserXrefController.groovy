@@ -1,7 +1,10 @@
 package ca.airspeed.wsbooks
 
+import grails.plugin.springsecurity.annotation.Secured;
+
 import org.springframework.dao.DataIntegrityViolationException
 
+@Secured('ROLE_ADMIN')
 class TsheetsUserXrefController {
 
 	static scaffold = TsheetsUserXref

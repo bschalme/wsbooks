@@ -52,6 +52,13 @@
 								</li>
 							</g:if>
 							</g:each>
+							<li>
+								<sec:ifLoggedIn>
+									<g:remoteLink class="logout" controller="logout" method="post" asynchronous="false" onSuccess="location.replace(${createLink(uri: '/')})">
+										<g:message code="Logout.label" default="Logout" />
+									</g:remoteLink>
+								</sec:ifLoggedIn>
+							</li>
 						</ul>
 					</div>
 				</div>

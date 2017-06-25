@@ -7,7 +7,7 @@ class UrlMappings {
 			}
 		}
 
-		"/CreditCardCharges"(resources:'CreditCardCharge') {
+		"/api/CreditCardCharges"(resources:'CreditCardCharge') {
 			"/TxnExpenseLineDetails"(resources:'TxnExpenseLineDetail')
 		}
 		"/"(view:"/index")

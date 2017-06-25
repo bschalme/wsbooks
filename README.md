@@ -232,14 +232,15 @@ Now deploy it using Tomcat's deployment manager.
 
 #### Docker
 
-There is a Docker file at the project root. Build it, tag it, and push it to a Docker registry:
+There is a Dockerfile at the project root. Build it, tag it, and push it to a Docker registry:
 
 ```
 docker build -t username/ws-books:latest .
 docker push username/ws-books:latest
 ```
 
-The preceding example tags and pushes the image to Docker Hub under `username`. If you are using a private registry, replace `username` with the FQDN of your Docker registry.
+The preceding example tags and pushes the image to Docker Hub under `username`. If you are using a private registry, 
+replace `username` with the FQDN of your Docker registry.
 
 It's easier to start WS-Books using Docker Compose. Begin in the `./example/` directory:
 
@@ -251,6 +252,7 @@ It's easier to start WS-Books using Docker Compose. Begin in the `./example/` di
 3. In `config/wsbooks/`, edit the two Configuration Files listed above:
     1. `wsbooks-config.groovy` - edit the SMTP appender here so the from: and to: are what you want.
     2. `wsbooks-quartz-config.groovy` - change the cron expressions if you like.  
+
 4. In `config/quickbooks_db`, create a `quickbooks_db.env` file having the four variables that the Docker MySQL image requires:
 
         MYSQL_ROOT_PASSWORD=<The MySQL root password>
@@ -265,7 +267,8 @@ It's easier to start WS-Books using Docker Compose. Begin in the `./example/` di
         MYSQL_USER=<The database user who will access wsbooks>
         MYSQL_PASSWORD=<Their password>
 
-6. If you have any MySQL backup files you want to use to seed the databases, put the .sql files in `./config/quickbooks_db/` and `./config/wsbooks_db/`. 
+6. If you have any MySQL backup files you want to use to seed the databases, put the .sql files in `./config/quickbooks_db/` and 
+`./config/wsbooks_db/`. 
 
 7. `docker-compose up -d`
 

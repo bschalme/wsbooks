@@ -5,12 +5,14 @@ import static org.springframework.http.HttpStatus.CREATED
 import java.util.Map;
 
 import grails.artefact.Artefact;
+import grails.plugin.springsecurity.annotation.Secured;
 import grails.rest.RestfulController
 import grails.transaction.Transactional;
 
 import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 import org.springframework.http.HttpStatus
 
+@Secured('ROLE_USER')
 @Artefact("Controller")
 @Transactional(readOnly = false)
 class CreditCardChargeController extends RestfulController<CreditCardCharge> {
