@@ -89,7 +89,11 @@ environments {
     production {
         grails.logging.jul.usebridge = false
         // TODO: grails.serverURL = "http://www.changeme.com"
-    }
+        grails.plugin.springsecurity.ipRestrictions = [
+		    // Change this to your suit your situation:
+           '/**': ['24.77.94.200/32', '205.200.64.3/32']
+        ]
+	}
 }
 
 
@@ -144,6 +148,7 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/favicon.ico':  ['permitAll']
 ]
 
+grails.plugin.springsecurity.logout.postOnly = false
 grails.plugin.springsecurity.filterChain.chainMap = [
 	//Stateless chain
 	'/api/**': 'JOINED_FILTERS,-anonymousAuthenticationFilter,-exceptionTranslationFilter,-authenticationProcessingFilter,-securityContextPersistenceFilter,-rememberMeAuthenticationFilter',

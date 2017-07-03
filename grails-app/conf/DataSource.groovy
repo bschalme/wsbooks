@@ -50,7 +50,7 @@ environments {
     production {
         dataSource {
             dbCreate = "update"
-			dialect = org.hibernate.dialect.MySQLInnoDBDialect
+			dialect = org.hibernate.dialect.MySQL5InnoDBDialect
 			driverClassName = 'com.mysql.jdbc.Driver'
 			String host = System.getenv('DB_WSBOOKS_HOST')
 			String port = System.getenv('DB_WSBOOKS_PORT')
