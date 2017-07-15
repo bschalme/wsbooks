@@ -8,4 +8,4 @@ LABEL name="WS-Books" \
       maintainer="Brian Schalme <bschalme@airspeed.ca>"
 ADD target/wsbooks-*.war app.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-Djetty.host=0.0.0.0","-jar","/app.jar"]
+ENTRYPOINT ["java","-XX:MaxPermSize=128m","-Djetty.host=0.0.0.0","-jar","/app.jar"]

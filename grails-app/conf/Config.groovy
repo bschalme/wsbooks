@@ -52,7 +52,8 @@ grails.mime.types = [
 //grails.urlmapping.cache.maxsize = 1000
 
 // What URL patterns should be processed by the resources plugin
-grails.resources.adhoc.patterns = ['/images/*', '/css/*', '/js/*', '/plugins/*']
+grails.resources.adhoc.patterns = ['/assets/**', '/images/*', '/css/*', '/js/*', '/plugins/**']
+grails.resources.adhoc.includes = ['/assets/**', '/images/*', '/css/*', '/js/*', '/plugins/**']
 grails.resources.adhoc.excludes = ['**/WEB-INF/**','**/META-INF/**']
 
 // The default codec used to encode data with ${}
@@ -145,7 +146,12 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/js/**':        ['permitAll'],
 	'/**/css/**':       ['permitAll'],
 	'/**/images/**':    ['permitAll'],
-	'/**/favicon.ico':  ['permitAll']
+	'/**/favicon.ico':  ['permitAll'],
+    '/register/**':     ['permitAll'],
+    '/user/**':         ['ROLE_ADMIN'],
+    '/role/**':         ['ROLE_ADMIN'],
+    '/securityInfo/**':         ['ROLE_ADMIN'],
+    '/registrationCode/**':         ['ROLE_ADMIN'],
 ]
 
 grails.plugin.springsecurity.logout.postOnly = false

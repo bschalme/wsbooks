@@ -50,15 +50,22 @@
 										<g:message code="${c.name}.label" default="${c.naturalName}" />
 									</g:link>
 								</li>
-							</g:if>
+								</g:if>
 							</g:each>
-							<li>
-								<sec:ifLoggedIn>
+							<sec:ifLoggedIn>
+								<li>
 									<g:remoteLink class="logout" controller="logout" method="post" asynchronous="false" onSuccess="location.replace(${createLink(uri: '/')})">
 										<g:message code="Logout.label" default="Logout" />
 									</g:remoteLink>
-								</sec:ifLoggedIn>
-							</li>
+								</li>
+							</sec:ifLoggedIn>
+							<sec:ifAllGranted roles='ROLE_ADMIN'>
+								<li>
+									<g:link controller="User">
+										<g:message code="security.admin.label" default="Sec Admin" />
+									</g:link>
+								</li>
+							</sec:ifAllGranted>
 						</ul>
 					</div>
 				</div>

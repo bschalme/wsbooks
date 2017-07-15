@@ -56,7 +56,7 @@ grails.project.dependency.resolution = {
     plugins {
         runtime ":hibernate4:4.3.4.1"
         runtime ":jquery:1.8.0"
-        runtime ":resources:1.2.7"
+        runtime ":resources:1.2.14"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
@@ -75,8 +75,10 @@ grails.project.dependency.resolution = {
         compile ':cache:1.1.8'
 		compile ":quartz:1.0.2"
 		compile ":quartz-monitor:1.0"
+		compile ":asset-pipeline:2.14.1"
 		compile ":rest-client-builder:2.1.1"
 		compile ":spring-security-rest:1.5.4"
+		compile ":spring-security-ui:1.0-RC3"
 		compile ":lesscss-resources:1.3.3"
     }
 	
