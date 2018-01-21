@@ -92,7 +92,7 @@ environments {
         // TODO: grails.serverURL = "http://www.changeme.com"
         grails.plugin.springsecurity.ipRestrictions = [
 		    // Change this to your suit your situation:
-           '/**': ['24.77.94.200/32', '205.200.64.3/32']
+           '/**': ['184.67.171.182/32', '205.200.64.3/32']
         ]
 	}
 }
