@@ -5,8 +5,8 @@ import java.util.jar.Attributes.Name;
 import com.sun.org.glassfish.external.arc.Taxonomy;
 
 class FreshbooksService {
-	def clients = ['CB0000-1190817876':2, '8000011D-1342792216':3, '8000013E-1456630159':51868]
-	def items = ['A&P:$93.50/hr':'A&P-1', 'A&P:$97.75/hr':'A&P-1', 'A&P:$100.00/hr':'A&P-1', 'Architecture:$110.00/hr':'SARCH-1']
+	def clients = ['CB0000-1190817876':2, '8000011D-1342792216':3, '8000013E-1456630159':51868, '80000150-1519869685':75149]
+	def items = ['A&P:$93.50/hr':'A&P-1', 'A&P:$97.75/hr':'A&P-1', 'A&P:$100.00/hr':'A&P-1', 'Architecture:$110.00/hr':'SARCH-1', 'Architecture:$115.00/hr':'SARCH-2']
 
     def createInvoice(Map<Object, Object> inv) {
 		def fbInv = new com.freshbooks.model.Invoice()

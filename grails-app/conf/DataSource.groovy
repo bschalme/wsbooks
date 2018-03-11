@@ -38,7 +38,7 @@ environments {
             dbCreate = "validate"
 			dialect = org.hibernate.dialect.MySQLInnoDBDialect
 			driverClassName = 'com.mysql.jdbc.Driver'
-            url = "jdbc:mysql://anakin/"
+            url = "jdbc:mysql://localhost/"
 			username = 'test-brian'
 			password = 'test-brian'
 			logSql = false
