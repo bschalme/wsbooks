@@ -2,8 +2,6 @@ package ca.airspeed.wsbooks
 
 import static org.apache.commons.lang.StringUtils.*
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-
 class Invoice {
 	
 	static hasMany = [detailLines : InvoiceLineDetail]

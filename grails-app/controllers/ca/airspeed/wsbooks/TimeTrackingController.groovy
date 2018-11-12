@@ -3,8 +3,8 @@ package ca.airspeed.wsbooks
 import org.springframework.security.access.annotation.Secured;
 
 import grails.artefact.Artefact;
+import grails.gorm.transactions.Transactional
 import grails.rest.RestfulController;
-import grails.transaction.Transactional;
 
 @Secured('ROLE_USER')
 @Artefact("Controller")

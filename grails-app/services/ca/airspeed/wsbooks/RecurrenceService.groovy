@@ -2,7 +2,7 @@ package ca.airspeed.wsbooks
 
 import groovy.util.logging.Slf4j;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 class RecurrenceService {
 

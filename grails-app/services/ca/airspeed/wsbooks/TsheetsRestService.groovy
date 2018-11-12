@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import grails.plugins.rest.client.RestBuilder;
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 import groovy.json.JsonSlurper;
 
 @Transactional

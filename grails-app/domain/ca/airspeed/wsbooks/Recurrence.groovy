@@ -1,6 +1,6 @@
 package ca.airspeed.wsbooks
 
-import org.joda.time.LocalDate
+import java.time.LocalDate
 import java.util.Date;
 
 class Recurrence {

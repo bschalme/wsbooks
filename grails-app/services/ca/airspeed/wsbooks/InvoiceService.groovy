@@ -7,10 +7,8 @@ import java.text.SimpleDateFormat
 import java.util.logging.Logger;
 
 import org.apache.commons.lang.NotImplementedException;
-import org.joda.time.DateTime
+import java.time.ZonedDateTime
 import org.springframework.util.Assert;
-
-import com.sun.org.apache.bcel.internal.generic.ISTORE;
 
 class InvoiceService {
 	
@@ -44,7 +42,7 @@ class InvoiceService {
 		newInv.isToBePrinted = true
 		def fromFmt = new SimpleDateFormat("MMM d")
 		def toFmt = new SimpleDateFormat("dd, yyyy")
-		newInv.other = fromFmt.format(newInv.txnDate) + ' - ' + toFmt.format(new DateTime(newInv.txnDate)
+		newInv.other = fromFmt.format(newInv.txnDate) + ' - ' + toFmt.format(new ZonedDateTime(newInv.txnDate)
 			.plusMonths(1).withDayOfMonth(1).minusDays(1).toDate())
 		newInv.status = 'ADD'
 		def baseDtls = baseInv.detailLines
@@ -98,7 +96,7 @@ class InvoiceService {
 		inv.isToBePrinted = 'true'
 		def startOfMonthFm = new SimpleDateFormat('MMM d')
 		def endOfMonthFm = new SimpleDateFormat('d, yyyy')
-		def startOfPeriod = new DateTime(invoiceDate).withDayOfMonth(1).toDate()
+		def startOfPeriod = new ZonedDateTime(invoiceDate).withDayOfMonth(1).toDate()
 		inv.other = startOfMonthFm.format(startOfPeriod) + ' - ' + endOfMonthFm.format(invoiceDate)
 		inv.status = 'ADD'
 		

@@ -1,6 +1,5 @@
 package ca.airspeed.wsbooks
 
-import grails.plugins.rest.client.RestBuilder
 import grails.util.Holders
 import groovy.json.JsonOutput;
 import groovy.json.JsonSlurper;
@@ -8,7 +7,7 @@ import groovy.json.JsonSlurper;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 import org.springframework.http.HttpStatus;
 
 class SampleService {

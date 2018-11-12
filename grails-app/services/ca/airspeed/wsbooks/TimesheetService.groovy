@@ -1,16 +1,13 @@
 package ca.airspeed.wsbooks
 
 import static java.lang.String.format
-import static org.joda.time.Days.daysBetween
 import groovy.json.JsonOutput;
 import groovy.json.JsonSlurper;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-
-import org.joda.time.DateMidnight;
-import org.joda.time.DateTime;
-import org.joda.time.Days;
+import java.time.Period
+import java.time.ZonedDateTime;
 
 class TimesheetService {
 
@@ -25,13 +22,13 @@ class TimesheetService {
 		nf.setMinimumFractionDigits(2)
 		def df = new SimpleDateFormat('EEE, MMM d')
 		def controlRecord = Control.findByRowName("Control Record")
-		DateTime lastFetchedDate = new DateTime(controlRecord.tsheetsLastFetchedDate).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0)
-		DateMidnight yesterday = new DateMidnight().minusDays(1)
+		ZonedDateTime lastFetchedDate = new ZonedDateTime(controlRecord.tsheetsLastFetchedDate).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0)
+        ZonedDateTime yesterday = new ZonedDateTime().withHour().withMinute(0).withSecond(0).withNano(0).minusDays(1)
 		if (lastFetchedDate.isAfter(yesterday)) {
 			log.info(format("TSheets Timesheets will be fetched two days after %s. None were fetched this time.", df.format(lastFetchedDate.toDate())))
 			return
 		}
-		if (daysBetween(lastFetchedDate, yesterday) < Days.ONE) {
+		if (Period.between(lastFetchedDate, yesterday).getDays() < 1) {
 			log.info("TSheets Timesheets will be fetched tomorrow. None were fetched this time.")
 			return
 		}

@@ -2,15 +2,15 @@ package ca.airspeed.wsbooks.converter
 
 import java.text.SimpleDateFormat;
 
-import org.joda.time.DateTime;
-import org.joda.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.time.LocalDate;
 
 import ca.airspeed.wsbooks.Customer;
 import ca.airspeed.wsbooks.ItemService;
 import ca.airspeed.wsbooks.TimeTracking;
 import ca.airspeed.wsbooks.TsheetsJobcodeXref;
 import ca.airspeed.wsbooks.TsheetsUserXref;
-import grails.transaction.Transactional
+import grails.gorm.transactions.Transactional
 
 @Transactional
 class TimeTrackingConverterService {
@@ -27,8 +27,8 @@ class TimeTrackingConverterService {
 			def jobcodeXref = TsheetsJobcodeXref.findByTsheetsJobcodeId(it.value.jobcode_id)
 			qbTime.customer = Customer.get(jobcodeXref?.qbCustomerListId)
 			qbTime.itemService = ItemService.get(jobcodeXref?.qbItemServiceListId)
-			def startTime = new DateTime(it.value.start).toDate()
-			def endTime = new DateTime(it.value.end).toDate()
+			def startTime = new ZonedDateTime(it.value.start).toDate()
+			def endTime = new ZonedDateTime(it.value.end).toDate()
 			def df = new SimpleDateFormat("HHmm")
 			qbTime.notes = df.format(startTime) + '-' + df.format(endTime) + ':' + it.value.notes
 			qbTime.billableStatus = 'Billable'

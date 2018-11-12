@@ -1,0 +1,6 @@
+.git
+setenv
+build
+bin
+target
+.gradle

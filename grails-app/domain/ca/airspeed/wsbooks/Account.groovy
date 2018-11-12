@@ -1,7 +1,5 @@
 package ca.airspeed.wsbooks
 
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-
 class Account {
 
 	static constraints = {

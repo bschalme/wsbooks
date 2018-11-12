@@ -7,9 +7,9 @@ import java.util.Map;
 import grails.artefact.Artefact;
 import grails.plugin.springsecurity.annotation.Secured;
 import grails.rest.RestfulController
-import grails.transaction.Transactional;
+import grails.web.http.HttpHeaders
+import grails.gorm.transactions.Transactional;
 
-import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 import org.springframework.http.HttpStatus
 
 @Secured('ROLE_USER')
@@ -68,11 +68,5 @@ class CreditCardChargeController extends RestfulController<CreditCardCharge> {
             }
         }
     }
-
-	@Override
-	protected Map getParametersToBind() {
-		return request.JSON
-	}
-
 
 }

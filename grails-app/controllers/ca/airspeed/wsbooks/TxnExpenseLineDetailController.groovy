@@ -13,10 +13,4 @@ RestfulController<TxnExpenseLineDetail> {
 	TxnExpenseLineDetailController() {
 		super(TxnExpenseLineDetail)
 	}
-
-	@Override
-	protected Map getParametersToBind() {
-		println request.JSON.id
-		return request.JSON
-	}
 }
