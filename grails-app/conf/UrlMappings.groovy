@@ -10,6 +10,8 @@ class UrlMappings {
 		"/api/CreditCardCharges"(resources:'CreditCardCharge') {
 			"/TxnExpenseLineDetails"(resources:'TxnExpenseLineDetail')
 		}
+		"/api/TimeTrackings"(resources:'TimeTracking') {
+		}
 		"/"(view:"/index")
 		"500"(view:'/error')
 	}
