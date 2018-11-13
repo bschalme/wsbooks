@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version "0.1"
+version "0.17-SNAPSHOT"
 group "ca.airspeed.wsbooks"
 
 apply plugin:"eclipse"
@@ -23,6 +23,7 @@ apply plugin:"org.grails.grails-gsp"
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
+    maven { url "https://airspeed.ca/maven2" }
 }
 
 dependencies {
