@@ -1,7 +1,7 @@
 package ca.airspeed.wsbooks.converter
 
-import org.codehaus.groovy.grails.io.support.ClassPathResource;
-import org.codehaus.groovy.grails.io.support.Resource;
+import org.grails.io.support.ClassPathResource;
+import org.grails.io.support.Resource;
 import java.time.LocalDate;
 
 import ca.airspeed.wsbooks.Customer;

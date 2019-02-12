@@ -69,6 +69,7 @@ dependencies {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging' 
     }
     compile 'org.springframework.boot:spring-boot-starter-log4j:1.3.8.RELEASE'
+	compile 'org.apache.commons:commons-lang3:3.8.1'
     runtime 'javax.mail:mail:1.4.7'
     runtime 'javax.activation:activation:1.1.1'
     testCompile 'org.grails:grails-test-mixins:3.3.0'

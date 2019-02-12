@@ -168,6 +168,12 @@ dataSource {
     username = "sa"
     password = ""
 }
+dataSources {
+    opensync {
+        dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+        url = "jdbc:h2:mem:devOpensyncDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
+    }
+		}
 hibernate {
     cache.use_second_level_cache = true
     cache.use_query_cache = false
@@ -188,28 +194,32 @@ environments {
                 defaultCatalog="wsbooks"
             }
         }
-        dataSource_opensync {
-            dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
-            url = "jdbc:h2:mem:devOpensyncDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
-        }
+		dataSources {
+            opensync {
+                dbCreate = "create-drop" // one of 'create', 'create-drop', 'update', 'validate', ''
+                url = "jdbc:h2:mem:devOpensyncDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
+            }
+		}
     }
     test {
         dataSource {
             dbCreate = "create-drop"
             url = "jdbc:h2:mem:testDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
         }
-        dataSource_opensync {
-            dbCreate = "validate"
-            dialect = org.hibernate.dialect.MySQLInnoDBDialect
-            driverClassName = 'com.mysql.jdbc.Driver'
-            url = "jdbc:mysql://localhost/"
-            username = 'test-brian'
-            password = 'test-brian'
-            logSql = false
-            properties {
-                defaultCatalog="brianopensync2"
+		dataSources {
+            opensync {
+                dbCreate = "validate"
+                dialect = org.hibernate.dialect.MySQLInnoDBDialect
+                driverClassName = 'com.mysql.jdbc.Driver'
+                url = "jdbc:mysql://localhost/"
+                username = 'test-brian'
+                password = 'test-brian'
+                logSql = false
+                properties {
+                    defaultCatalog="brianopensync2"
+                }
             }
-        }
+		}
     }
     production {
         dataSource {

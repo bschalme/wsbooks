@@ -1,4 +1,4 @@
-import org.joda.time.DateTime;
+import java.time.ZonedDateTime;
 
 import ca.airspeed.wsbooks.Customer;
 
@@ -13,7 +13,7 @@ class MonthlyInvoiceJob {
 
 	def execute() {
          def activeCusts = Customer.findAllByIsActive("true")
-		 def endOfLastMonth = new DateTime().withDayOfMonth(1).minusDays(1).toDate()
+		 def endOfLastMonth = new ZonedDateTime().withDayOfMonth(1).minusDays(1).toDate()
 		 activeCusts.each { cust ->
 			 def inv = invoiceService.createTimeByCustomerAndDate(cust, endOfLastMonth)
 			 if (inv?.invoiceNumber != null) {

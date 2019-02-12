@@ -1,4 +1,4 @@
-<%@ page import="org.codehaus.groovy.grails.web.servlet.GrailsApplicationAttributes" %>
+<%@ page import="org.grails.web.util.GrailsApplicationAttributes" %>
 <!doctype html>
 <html lang="en">
 	<head>
