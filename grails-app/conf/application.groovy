@@ -1,16 +1,16 @@
-import static org.quartz.JobBuilder.*;
-import static org.quartz.CronScheduleBuilder.*;
-import static org.quartz.SimpleScheduleBuilder.*;
-import static org.quartz.TriggerBuilder.*;
+//import static org.quartz.JobBuilder.*;
+//import static org.quartz.CronScheduleBuilder.*;
+//import static org.quartz.SimpleScheduleBuilder.*;
+//import static org.quartz.TriggerBuilder.*;
 
 import java.text.SimpleDateFormat;
 
-import org.quartz.Job
-import org.quartz.JobDataMap
-import org.quartz.JobDetail
-import org.quartz.Trigger
+//import org.quartz.Job
+//import org.quartz.JobDataMap
+//import org.quartz.JobDetail
+//import org.quartz.Trigger
 
-import ca.airspeed.wsbooks.Customer;
+//import ca.airspeed.wsbooks.Customer;
 
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
@@ -208,16 +208,8 @@ environments {
         }
 		dataSources {
             opensync {
-                dbCreate = "validate"
-                dialect = org.hibernate.dialect.MySQLInnoDBDialect
-                driverClassName = 'com.mysql.jdbc.Driver'
-                url = "jdbc:mysql://localhost/"
-                username = 'test-brian'
-                password = 'test-brian'
-                logSql = false
-                properties {
-                    defaultCatalog="brianopensync2"
-                }
+                dbCreate = "create-drop"
+                url = "jdbc:h2:mem:testOpensyncDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE"
             }
 		}
     }

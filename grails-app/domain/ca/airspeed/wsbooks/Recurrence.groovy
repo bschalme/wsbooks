@@ -1,6 +1,7 @@
 package ca.airspeed.wsbooks
 
 import java.time.LocalDate
+import java.time.ZonedDateTime
 import java.util.Date;
 
 class Recurrence {
@@ -23,8 +24,8 @@ class Recurrence {
 	String frequency = "Monthly"
 	String txnTiming = "In Advance"
 	Date previousRunDate
-	Date nextRunDate = new LocalDate().plusMonths(1).withDayOfMonth(1).toDate()
-	Date finalRunDate = new LocalDate().plusMonths(12).withDayOfMonth(1).toDate()
+	Date nextRunDate = Date.from(ZonedDateTime.now().plusMonths(1).withDayOfMonth(1).toInstant())
+	Date finalRunDate = Date.from(ZonedDateTime.now().plusMonths(12).withDayOfMonth(1).toInstant())
 	Boolean active = true
 	Date dateCreated
 	Date lastUpdated
