@@ -243,7 +243,7 @@ class InvoiceServiceTests {
 		assert inv.terms.listID == '20000-929918818'
 		assert inv.terms.name == 'Net 30'
 		assert inv.customerMsg.name?.startsWith('Questions concerning this invoice?')
-		assert inv.isToBePrinted == 'true'
+		assert inv.isToBePrinted == 'false'
 		assert inv.other == expectedOther
 		assert inv.status == 'ADD'
 		

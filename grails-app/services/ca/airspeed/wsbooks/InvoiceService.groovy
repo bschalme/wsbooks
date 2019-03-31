@@ -95,7 +95,7 @@ class InvoiceService {
 		inv.terms = StandardTerms.get('20000-929918818')
 		inv.customerMsg = CustomerMsg.get('70000-951878262')
 		inv.customer = customer
-		inv.isToBePrinted = 'true'
+		inv.isToBePrinted = 'false'
 		def startOfMonthFm = new SimpleDateFormat('MMM d')
 		def endOfMonthFm = new SimpleDateFormat('d, yyyy')
 		def startOfPeriod = new DateTime(invoiceDate).withDayOfMonth(1).toDate()
