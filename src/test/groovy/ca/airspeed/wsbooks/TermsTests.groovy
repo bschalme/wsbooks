@@ -1,20 +1,30 @@
 package ca.airspeed.wsbooks;
 
-import grails.test.mixin.TestFor;
+import org.springframework.context.ConfigurableApplicationContext
 
-@TestFor(Terms)
-class TermsTests {
+import grails.testing.gorm.DomainUnitTest
+import spock.lang.Specification
 
-	void testConstraints() {
-		Terms tr = new Terms()
+class TermsTests extends Specification implements DomainUnitTest<Terms>, MultiDatasourceTest {
 
-		assert !tr.validate()
-		assert "nullable" == tr.errors["listID"].code
-		assert "nullable" == tr.errors["fullName"].code
+	@Override
+	Closure doWithSpring() {
+		return {
+			configDatasource(application.mainContext as ConfigurableApplicationContext, "opensync")
+		}
+	}
 
-		tr.listID = 'ABC-123'
-		tr.fullName = 'Net 37'
+	void "Test the constraints"() {
+		expect:
+		!domain.validate(['listID', 'fullName'])
+		domain.errors["listID"].code == 'nullable'
+		domain.errors["fullName"].code == 'nullable'
 
-		assert tr.validate()
+		when:
+		domain.listID = 'ABC-123'
+		domain.fullName = 'Net 37'
+
+		then:
+		domain.validate()
 	}
 }

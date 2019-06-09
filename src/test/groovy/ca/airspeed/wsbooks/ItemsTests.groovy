@@ -1,27 +1,43 @@
 package ca.airspeed.wsbooks;
 
-import grails.test.mixin.TestFor;
+import org.springframework.context.ConfigurableApplicationContext
 
-@TestFor(Items)
-class ItemsTests {
+import grails.testing.gorm.DomainUnitTest
+import spock.lang.Specification
 
-	void testConstraints() {
-		Items items = new Items()
-		
-		assert !items.validate()
-		assert "nullable" == items.errors["listID"].code
-		assert "nullable" == items.errors["fullName"].code
-		assert "nullable" == items.errors["tableName"].code
-		
-		items.listID = 'ABC-123'
-		items.fullName = 'Alphabet Soup'
-		items.tableName = 'customer'
-		
-		assert !items.validate()
-		assert "not.inList" == items.errors["tableName"].code
-		
-		items.tableName = 'itemservice'
-		assert items.validate()
-	} 
+class ItemsTests extends Specification implements DomainUnitTest<Items>, MultiDatasourceTest {
 
+	@Override
+	Closure doWithSpring() {
+		return {
+			configDatasource(application.mainContext as ConfigurableApplicationContext, "opensync")
+		}
+	}
+
+	void "Test the constraints"() {
+		expect:
+		assert !domain.validate([
+			'listID',
+			'fullName',
+			'tableName'
+		])
+		domain.errors["listID"].code == 'nullable'
+		domain.errors["fullName"].code == 'nullable'
+		domain.errors["tableName"].code == 'nullable'
+
+		when:
+		domain.listID = 'ABC-123'
+		domain.fullName = 'Alphabet Soup'
+		domain.tableName = 'customer'
+
+		then:
+		!domain.validate(['tableName'])
+		domain.errors["tableName"].code == 'not.inList'
+
+		when:
+		domain.tableName = 'itemservice'
+
+		then:
+		domain.validate()
+	}
 }

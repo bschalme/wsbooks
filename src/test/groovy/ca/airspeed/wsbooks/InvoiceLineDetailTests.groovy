@@ -1,45 +1,60 @@
 package ca.airspeed.wsbooks
 
+import org.springframework.context.ConfigurableApplicationContext
 
+import grails.testing.gorm.DomainUnitTest
+import spock.lang.Specification
 
-import grails.test.mixin.TestFor
+class InvoiceLineDetailTests extends Specification implements DomainUnitTest<InvoiceLineDetail>, MultiDatasourceTest {
 
-/**
- * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
- */
-@TestFor(InvoiceLineDetail)
-class InvoiceLineDetailTests {
+	@Override
+	Closure doWithSpring() {
+		return {
+			configDatasource(application.mainContext as ConfigurableApplicationContext, "opensync")
+		}
+	}
 
-    void testConstraints() {
-       def dtl = new InvoiceLineDetail()
-	   
-	   assert !dtl.validate()
-	   assert "nullable" == dtl.errors["txnLineID"].code
-	   assert "nullable" == dtl.errors["item"].code
-	   // assert "nullable" == dtl.errors["description"]?.code
-	   assert "nullable" == dtl.errors["quantity"].code
-	   // assert "nullable" == dtl.errors["rate"].code
-	   // assert "missing.sales.tax.code" == dtl.errors["salesTaxCodeRefListID"].code
-	   
-	   dtl.txnLineID = "DEF-456"
-	   dtl.item = new Items(fullName: 'A&P:$100/hr', listID: '140000-1069940598')
-	   dtl.description = ''
-	   dtl.quantity = '23A'
-	   dtl.salesTaxCodeRefFullName = 'G'
-	   assert !dtl.validate()
-	   assert "notANumber" == dtl.errors["quantity"].code
-	   
-	   dtl.quantity = '-0.1'
-	   assert !dtl.validate()
-	   assert "min.notmet" == dtl.errors["quantity"].code
-	   
-	   dtl.quantity= '125.5'
-	   dtl.rate = '100'
-	   dtl.description = 'Analysis & Programming Services'
-	   assert !dtl.validate()
-	   assert "nullable" == dtl.errors["invoice"].code
-	   
-	   dtl.invoice = new Invoice()
-	   assert dtl.validate()
-    }
+	void "Test the constraints"() {
+		expect:
+		!domain.validate(['txnLineID', 'item', 'quantity'])
+		domain.errors["txnLineID"].code == 'nullable'
+		domain.errors["item"].code == 'nullable'
+		// assert "nullable" == domain.errors["description"]?.code
+		domain.errors["quantity"].code == 'nullable'
+		// assert "nullable" == domain.errors["rate"].code
+		// assert "missing.sales.tax.code" == domain.errors["salesTaxCodeRefListID"].code
+
+		when:
+		domain.txnLineID = "DEF-456"
+		domain.item = new Items(fullName: 'A&P:$100/hr', listID: '140000-1069940598')
+		domain.description = ''
+		domain.quantity = '23A'
+		domain.salesTaxCodeRefFullName = 'G'
+
+		then:
+		!domain.validate(['quantity'])
+		domain.errors["quantity"].code == 'notANumber'
+
+		when:
+		domain.quantity = '-0.1'
+
+		then:
+		!domain.validate(['quantity'])
+		domain.errors["quantity"].code == 'min.notmet'
+
+		when:
+		domain.quantity= '125.5'
+		domain.rate = '100'
+		domain.description = 'Analysis & Programming Services'
+
+		then:
+		!domain.validate(['invoice'])
+		domain.errors["invoice"].code == 'nullable'
+
+		when:
+		domain.invoice = new Invoice()
+
+		then:
+		domain.validate()
+	}
 }

@@ -1,54 +1,78 @@
 package ca.airspeed.wsbooks
 
-
-
 import grails.test.mixin.TestFor
+import grails.testing.gorm.DomainUnitTest
+import org.springframework.context.ConfigurableApplicationContext
+import spock.lang.Specification
 
-/**
- * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
- */
-@TestFor(Invoice)
-class InvoiceTests {
+class InvoiceTests extends Specification implements DomainUnitTest<Invoice>, MultiDatasourceTest {
 
-    void testConstraints() {
-       def inv = new Invoice()
-	   
-	   assert !inv.validate()
-	   assert "nullable" == inv.errors["txnID"].code
-	   assert "nullable" == inv.errors["customer"].code
-	   assert "nullable" == inv.errors["txnDate"].code
-	   assert "nullable" == inv.errors["refNumber"].code
-	   assert "nullable" == inv.errors["arAccount"].code
-	   assert "nullable" == inv.errors["terms"].code
-	   
-	   inv.txnID = 'ABC-123'
-	   inv.arAccount = new Account()
-	   inv.customer = new Customer(name: "MegaCorp:Real Estate Web Service")
-	   inv.txnDate = new Date()
-	   inv.refNumber = '99999'
-	   inv.customerMsg = new CustomerMsg()
-	   inv.terms = new StandardTerms(listID: '20000-929918818', name: 'Net 30')
-	   inv.status = 'ZZZZ'
-	   assert !inv.validate()
-	   assert "not.inList" == inv.errors["status"].code
-	   assert "account.must.be.ar" == inv.errors["arAccount"].code
-	   assert inv.terms.name == 'Net 30'
-	   
-	   assert "nullable" == inv.errors["detailLines"]?.find{ it.code == 'nullable'}.code
-	   Set<InvoiceLineDetail> details = new HashSet<InvoiceLineDetail>()
-	   inv.detailLines = details
-	   inv.arAccount.accountType = 'AccountsReceivable'
-	   assert !inv.validate()
-	   assert "invoice.details.minimum" == inv.errors["detailLines"]?.find{ it.code == 'invoice.details.minimum'}?.code
-	   details.add(new InvoiceLineDetail())
-	   inv.detailLines = details
-	   
-	   inv.status = 'ADD'
-	   assert inv.validate()
-	   inv.status = 'UPDATE'
-	   assert inv.validate()
-	   inv.status = 'DELETE'
-	   assert inv.validate()
-    }
-	
+	@Override
+	Closure doWithSpring() {
+		return {
+			configDatasource(application.mainContext as ConfigurableApplicationContext, "opensync")
+		}
+	}
+
+	void "Test the constraints"() {
+		expect:
+		!domain.validate(['txnID', 'customer', 'txnDate', 'refNumber', 'arAccount', 'terms'])
+		domain.errors["txnID"].code == 'nullable'
+		domain.errors["customer"].code == 'nullable'
+		domain.errors["txnDate"].code == 'nullable'
+		domain.errors["refNumber"].code == 'nullable'
+		domain.errors["arAccount"].code == 'nullable'
+		domain.errors["terms"].code == 'nullable'
+
+		when:
+		domain.txnID = 'ABC-123'
+		domain.arAccount = new Account()
+		domain.customer = new Customer(name: "MegaCorp:Real Estate Web Service")
+		domain.txnDate = new Date()
+		domain.refNumber = '99999'
+		domain.customerMsg = new CustomerMsg()
+		domain.terms = new StandardTerms(listID: '20000-929918818', name: 'Net 30')
+		domain.status = 'ZZZZ'
+
+		then:
+		!domain.validate(['status', 'arAccount'])
+		domain.errors["status"].code == 'not.inList'
+		domain.errors["arAccount"].code == 'account.must.be.ar'
+
+		when:
+		domain.terms.name == 'Net 30'
+
+		then:
+		!domain.validate(['detailLines'])
+		domain.errors["detailLines"].code == 'nullable'
+
+		when:
+		Set<InvoiceLineDetail> details = new HashSet<InvoiceLineDetail>()
+		domain.detailLines = details
+		domain.arAccount.accountType = 'AccountsReceivable'
+
+		then:
+		!domain.validate(['detailLines'])
+		domain.errors["detailLines"].code == 'invoice.details.minimum'
+
+		when:
+		details.add(new InvoiceLineDetail())
+		domain.detailLines = details
+		domain.status = 'ADD'
+
+		then:
+		domain.validate()
+
+		when:
+		domain.status = 'UPDATE'
+
+		then:
+		domain.validate()
+
+		when:
+		domain.status = 'DELETE'
+
+		then:
+		domain.validate()
+	}
 }
