@@ -1,31 +1,41 @@
 package ca.airspeed.wsbooks
 
-import org.apache.commons.validator.Msg;
+import grails.testing.gorm.DomainUnitTest
+import org.springframework.context.ConfigurableApplicationContext
+import spock.lang.Specification
 
-import grails.test.mixin.TestFor;
+class CustomerMsgTests extends Specification implements DomainUnitTest<CustomerMsg>, MultiDatasourceTest {
 
-@TestFor(CustomerMsg)
-class CustomerMsgTests {
+	@Override
+	Closure doWithSpring() {
+		return {
+			configDatasource(application.mainContext as ConfigurableApplicationContext, "opensync")
+		}
+	}
 
-	void testConstraints() {
-		CustomerMsg msg =  new CustomerMsg()
+	void "Test the constraints"() {
+		expect:
+		!domain.validate(['listID', 'name', 'isActive'])
+		domain.errors['listID'].code == 'nullable'
+		domain.errors['name'].code == 'nullable'
+		domain.errors['isActive'].code == 'nullable'
 
-		assert !msg.validate()
-		assert "nullable" == msg.errors["listID"].code
-		assert "nullable" == msg.errors["name"].code
-		assert "nullable" == msg.errors["isActive"].code
-		
-		msg.listID = 'ABC-123'
-		msg.name = 'Test Message'
-		msg.isActive = 'maybe'
-		msg.status = 'ADD'
-		assert !msg.validate()
-		assert "not.inList" == msg.errors["isActive"].code
-		assert "not.inList" == msg.errors["status"].code
-		
-		msg.isActive = 'true'
-		msg.status = null
-		
-		assert msg.validate()
+		when:
+		domain.listID = 'ABC-123'
+		domain.name = 'Test Message'
+		domain.isActive = 'maybe'
+		domain.status = 'ADD'
+
+		then:
+		!domain.validate(['isActive', 'status'])
+		domain.errors['isActive'].code == 'not.inList'
+		domain.errors['status'].code == 'not.inList'
+
+		when:
+		domain.isActive = 'true'
+		domain.status = null
+
+		then:
+		domain.validate()
 	}
 }

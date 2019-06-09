@@ -1,30 +1,19 @@
 
 package ca.airspeed.wsbooks
 
+import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.core.convert.converter.Converter
 import org.springframework.core.convert.support.ConfigurableConversionService
 
 import grails.testing.gorm.DomainUnitTest
 import spock.lang.Specification
 
-class VendorTests extends Specification implements DomainUnitTest<Vendor> {
-
-	static{
-		System.setProperty("grails.gorm.connections", "opensync")
-	}
+class VendorTests extends Specification implements DomainUnitTest<Vendor>, MultiDatasourceTest {
 
 	@Override
 	Closure doWithSpring() {
 		return {
-			ConfigurableConversionService conversionService = application.mainContext.getEnvironment().getConversionService()
-			conversionService.addConverter(new Converter<String, Map>() {
-						@Override
-						Map convert(String source) {
-							source.split(",").collectEntries({
-								[(it):it]
-							})
-						}
-					})
+			configDatasource(application.mainContext as ConfigurableApplicationContext, "opensync")
 		}
 	}
 
