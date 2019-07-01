@@ -1,14 +1,15 @@
 package ca.airspeed.wsbooks
 
-
-
-import grails.test.mixin.TestFor
-import grails.test.mixin.Mock
+import grails.testing.gorm.DataTest
+import grails.testing.gorm.DomainUnitTest
+import grails.testing.web.controllers.ControllerUnitTest
 import spock.lang.Specification
 
-@TestFor(ControlController)
-@Mock(Control)
-class ControlControllerSpec extends Specification {
+class ControlControllerSpec extends Specification implements ControllerUnitTest<ControlController>, DataTest {
+
+    void setupSpec() {
+        mockDomains Control
+    }
 
     def populateValidParams(params) {
         assert params != null
@@ -120,6 +121,7 @@ class ControlControllerSpec extends Specification {
 
         when:"The domain instance is passed to the delete action"
 		    params.id = control.id
+			request.method = 'POST'
             controller.delete()
 
         then:"The instance is deleted"

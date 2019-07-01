@@ -1,5 +1,8 @@
 package ca.airspeed.wsbooks
 
+import grails.persistence.Entity
+
+@Entity
 class Control {
 	String rowName
 	Date tsheetsLastFetchedDate

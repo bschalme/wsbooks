@@ -1,9 +1,11 @@
 package ca.airspeed.wsbooks
 
+import grails.artefact.Artefact
 import grails.plugin.springsecurity.annotation.Secured
 
 import org.springframework.dao.DataIntegrityViolationException
 
+@Artefact("Controller")
 @Secured('ROLE_ADMIN')
 class ControlController {
 
