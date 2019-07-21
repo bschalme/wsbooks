@@ -1,6 +1,6 @@
 FROM openjdk:7-jdk-alpine
 LABEL name="WS-Books" \
-      version="0.18.0" \
+      version="0.19.0-SNAPSHOT" \
       release="1" \
       architecture="x86_64" \
       vendor="Airspeed Consulting" \
