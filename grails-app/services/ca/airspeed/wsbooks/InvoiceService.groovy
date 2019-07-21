@@ -139,7 +139,8 @@ class InvoiceService {
 			resultLine.unitCost = spd?.price.toBigDecimal()
 			log.debug('line.item.listID = ' + line.item.listID)
 			log.debug('ItemService.salesTaxCodeRefListID = ' + ItemService.get(line.item.listID).salesTaxCodeRefListID)
-			ItemSalesTax ist = ItemSalesTax.get(SalesTaxCode.get(ItemService.get(line.item.listID).salesTaxCodeRefListID).itemSalesTaxRefListID)
+			log.debug('Customer.salesTaxCodeRefListID = ' + customer.salesTaxCodeRefListID)
+			ItemSalesTax ist = ItemSalesTax.get(SalesTaxCode.get(customer.salesTaxCodeRefListID).itemSalesTaxRefListID)
 			def taxes = []
 			def tax = [:]
 			tax.name = ist?.name?.split()[0]

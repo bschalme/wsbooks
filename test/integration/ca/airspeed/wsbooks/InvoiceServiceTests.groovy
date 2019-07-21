@@ -202,6 +202,7 @@ class InvoiceServiceTests {
 		
 		def customer = Customer.get('CD0000-1190818043')
 		assert customer.fullName == 'FNT:Website Hosting'
+		assert customer.salesTaxCodeRefListID == '80000003-0'
 		def endOfLastMonth = new DateTime().withDayOfMonth(1).minusDays(1).toDate()
 		def beginningOfLastMonth = new DateTime().minusMonths(1).withDayOfMonth(1).toDate()
 		def startOfMonthFm = new SimpleDateFormat('MMM d')
@@ -231,7 +232,7 @@ class InvoiceServiceTests {
 		lineCreated = invCreated.lines[1]
 		assert lineCreated.quantity == 1.75
 
-		Invoice inv = Invoice.findByCustomer(Customer.get('CD0000-1190818043'))
+		Invoice inv = Invoice.findByRefNumber(invCreated.invoiceNumber)
 		assert inv != null
 		assert StringUtils.isNotBlank(inv.txnID)
 		assert inv.refNumber == '1'
@@ -274,7 +275,54 @@ class InvoiceServiceTests {
 		assert t4.billableStatus == 'HasBeenBilled'
 		assert t4.status == 'ADD'
 	}
-	
+
+	@Test
+	void testItemIsGstAndCustomerIsHst() {
+		// Given:
+		def t5 = new TimeTracking()
+		t5.txnID = 'TIME-1'
+		t5.txnDate = new Date()
+		t5.entityRefListID = '20000-929923144'
+		t5.customer = Customer.get('80000156-1554056987')
+		t5.itemService = ItemService.get('140000-1069940598')
+		t5.durationInMinutes = 120
+		t5.billableStatus = 'Billable'
+		t5.status = ''
+		t5.save(failOnError: true)
+		
+		def customer = Customer.get('80000156-1554056987')
+		assert customer.fullName == 'HCMWorks:Investors Group'
+		assert customer.salesTaxCodeRefListID == '80000007-1558482994'
+		def endOfLastMonth = new DateTime().withDayOfMonth(1).minusDays(1).toDate()
+		def beginningOfLastMonth = new DateTime().minusMonths(1).withDayOfMonth(1).toDate()
+		def startOfMonthFm = new SimpleDateFormat('MMM d')
+		def endOfMonthFm = new SimpleDateFormat('d, yyyy')
+
+		// When
+		def invCreated = service.createTimeByCustomerAndDate(customer, endOfLastMonth)
+		
+		// Then
+		assert invCreated != null
+		assert invCreated.invoiceNumber == '1'
+		assert invCreated.sourceSystem == 'QuickBooks'
+		assert invCreated.clientID == '80000155-1554056926'
+		assert invCreated.date == endOfLastMonth
+		assert invCreated.terms == 'Net 30'
+		def expectedOther = startOfMonthFm.format(beginningOfLastMonth) + ' - '  + endOfMonthFm.format(endOfLastMonth)
+		assert invCreated.period == expectedOther
+		assert invCreated.notes == 'Airspeed Consulting is a division of 4020774 Manitoba Ltd.'
+		// This set of test data has some unbilled TimeTracking entries, so this is why there is one entry in addition
+		// to the one we expect:
+		assert invCreated.lines.size() == 2
+		def lineCreated = invCreated.lines[1]
+		assert lineCreated.name == 'A&P:$100.00/hr'
+		assert lineCreated.description == 'Analysis & Programming Services'
+		assert lineCreated.quantity == 2
+		assert lineCreated.unitCost == 100.00
+		assert lineCreated.taxes?.get(0)?.name == 'HST'
+		assert lineCreated.taxes?.get(0)?.percent == 13.00
+	}
+
 	@Test
 	void testNoTimeInvoice() {
 		// Given
