@@ -3,6 +3,7 @@ package ca.airspeed.wsbooks
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Logger;
 
 import grails.plugins.rest.client.RestBuilder;
 import grails.transaction.Transactional
@@ -29,6 +30,7 @@ class TsheetsRestService {
 		def config = grailsApplication?.config
 		def token = config.tsheets.rest.token
 		RestBuilder rest = new RestBuilder()
+		log.info("Doing an HTTP GET on " + config.tsheets.rest.url + 'timesheets?start_date=' + df.format(startDate) + '&end_date=' + df.format(endDate))
 		def response = rest.get(config.tsheets.rest.url + 'timesheets?start_date=' + df.format(startDate) + '&end_date=' + df.format(endDate)) {
 			header 'Authorization', 'Bearer ' + token
 		}
